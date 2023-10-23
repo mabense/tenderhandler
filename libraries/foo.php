@@ -3,31 +3,42 @@
 // SESSION
 
 
-function haveSession($defaultPage){
+function haveSession($defaultPage)
+{
 	if (!session_id()) {
-		return successBool(session_start());
+		session_start();
 	}
-	if (!isset($_SESSION["p"])) {
-		return successBool($_SESSION["p"] = $defaultPage);
-		return successBool($_SESSION["p0"] = $defaultPage);
+	if (!isset($_SESSION["page"])) {
+		$_SESSION["page"] = $defaultPage;
 	}
 }
 
 
-function getPage(){
-	return $_SESSION["p"];
+function getPage()
+{
+	return $_SESSION["page"];
 }
 
 
-function setPage($defaultPage){
-	return successBool($_SESSION["p"] = $defaultPage);
+function setPage($defaultPage)
+{
+	$_SESSION["page"] = $defaultPage;
 }
 
 
-function resetPage(){
-	return successBool($_SESSION["p"] = $_SESSION["p0"]);
+function getRank() {
+	if (!isset($_SESSION["user"])) {
+		return "guest";
+	}
+	else {
+		$isAdmin = sqlIsAdmin($_SESSION["user"]);
+		return $isAdmin ? "admin" : "manager";
+	}
 }
 
 
+// SQL QUERIES
 
-?>
+function sqlIsAdmin($user) {
+	
+}
