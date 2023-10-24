@@ -1,52 +1,41 @@
 <?php
-
-// Definitions
-
-function try_require_once($path, $require=true, $once=true){
-    if (file_exists($path)) {
-        if ($require) {
-            if ($once) require_once($path);
-            else require($path);
-        }
-        else {
-            if ($once) include_once($path);
-            else include($path);
-        }
-    }
-    elseif ($require) {
-        die("Error: " . $path . " not found!");
-    }
-}
-
-try_require_once("./libraries/paths.php"); // paths
-try_require_once("./libraries/const.php"); // constants
-try_require_once("./libraries/foo.php"); // functions
+require_once("./__prologue.php");
 
 // Session setup
 
-haveSession("log_in");
+haveSession(DEFAULT_PAGE);
 $page = getPage();
-$pageTitle = ucwords(str_replace("_", " ", $page));
-$pageContent = PAGE_DIR . $page . ".php";
+$pageTitle = pageTitle($page);
+$pagePath = PAGE_DIR . $page . ".php";
+// pushFeedbackToLog("Page=" . $page);
 
-// DOM build
+// DOM start
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
-    
-    $titleTag = $dom->getElementsByTagName("title")[0];
-    $titleTag->textContent .= " - " . $pageTitle;
-    
-    try_require_once(TOOLBAR);
+$dom = domStart();
 
-    try_require_once($pageContent);
+// Fetch page
 
-    echo $dom->saveHTML();
+require_once($pagePath);
+
+// DOM finish
+
+$feedback = getFeedbackLog();
+resetFeedbackLog();
+if ($feedback !== false) {
+    $feedbackTag = $dom->getElementById("feedback");
+    foreach ($feedback as $line) {
+        $message = $line[0];
+        $isError = $line[1];
+        $div = $dom->createElement("div");
+        $classList = $div->getAttribute("class");
+        $class = $isError ? "errorMsg" : "feedbackMsg";
+        $div->setAttribute("class", $classList . " " . $class);
+        $div->textContent = $message;
+        $feedbackTag->appendChild($div);
+    }
 }
-else {
-    echo "Error loading page!";
-}
+echo $dom->saveHTML();
 
 // Session cleanup
 
-session_destroy();
+// session_destroy();

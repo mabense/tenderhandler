@@ -1,0 +1,45 @@
+html,
+body,
+#container {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#toolbar>*,
+#content {
+    padding: 1.5vw;
+}
+
+#feedback>* {
+    padding: 0.5vw;
+}
+
+#toolbar,
+#content,
+#feedback,
+#feedback>* {
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+#toolbar,
+#feedback {
+    position: sticky;
+}
+
+#toolbar {
+    top: 0;
+}
+
+#content {
+    height: 100%;
+}
+
+#feedback {
+    bottom: 0;
+}

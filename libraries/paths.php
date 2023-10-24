@@ -1,4 +1,5 @@
 <?php
+// Run in index.php
 
 // Directories
 
@@ -11,6 +12,6 @@ define("STYLE_DIR", INDEX_DIR . "styles" . DIRECTORY_SEPARATOR);
 //Files
 
 define("BASE_TEMPLATE", ELEM_DIR . "base.htm");
-define("TOOLBAR", ELEM_DIR . "toolbar.php");
+define("TOOLBAR", ELEM_DIR . "toolbar.htm");
 
 ?>

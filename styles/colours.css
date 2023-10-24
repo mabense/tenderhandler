@@ -1,0 +1,31 @@
+:root {
+
+    --bg: palegoldenrod;
+    --text: navy;
+    --bg-accent: navy;
+    --text-accent: palegoldenrod;
+    --bg-overlay: rgba(0, 0, 0, .25);
+    --text-overlay: black;
+    --bg-error: rgba(255, 255, 255, .25);
+    --text-error: red;
+}
+
+body {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+#toolbar {
+    background-color: var(--bg-accent);
+    color: var(--text-accent);
+}
+
+#feedback > .feedbackMsg {
+    background-color: var(--bg-overlay);
+    color: var(--text-overlay);
+}
+
+#feedback > .errorMsg {
+    background-color: var(--bg-error);
+    color: var(--text-error);
+}

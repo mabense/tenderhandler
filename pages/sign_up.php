@@ -8,10 +8,10 @@ if ($dom) {
     domSetInnerHTML($toolbarTag, domMakeToolbar([
         "log_in",
         "sign_up", 
-        "neverland"
+        "car_keys"
     ]));
 
     // Add content
     $contentTag = $dom->getElementById("content");
-    $contentTag->textContent = "login works";
+    $contentTag->textContent = "signup works";
 }
