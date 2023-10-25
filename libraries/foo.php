@@ -56,28 +56,15 @@ function resetFeedbackLog()
 
 // DOM
 
-function domStart()
-{
-	$dom = new DOMDocument();
-	if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
-		$titleTag = $dom->getElementsByTagName("title")[0];
-		$titleTag->textContent .= " - " . $GLOBALS["pageTitle"];
-		return $dom;
-	} else {
-		return false;
-	}
-}
-
 function domMakeToolbar($pages)
 {
 	$str = '';
 	if (is_array($pages)) {
 		foreach ($pages as $page) {
 			$route = './routes/' . $page . '.php';
-			if(file_exists($route)){
+			if (file_exists($route)) {
 				$str .= '<a href="' . $route . '">';
-			}
-			else {
+			} else {
 				$str .= '<a href="./routes/not_found.php?r=' . $page . '">';
 			}
 			$str .= pageTitle($page) . '</a>';
@@ -86,14 +73,27 @@ function domMakeToolbar($pages)
 	return $str;
 }
 
-function domSetInnerHTML($element, $html)
+function domElementFillWithString($element, $string)
 {
 	$frag = $element->ownerDocument->createDocumentFragment();
 	// $frag = new DOMDocumentFragment();
-	$frag->appendXML($html);
+	$frag->appendXML($string);
 	while ($element->hasChildNodes()) {
 		$element->removeChild($element->firstChild);
 	}
 	$element->appendChild($frag);
 	return $frag;
+}
+
+function domElementFillWithTemplate($element, $template)
+{
+	// $element->textContent = file_get_contents($template);
+	$tmpNode = new DOMDocument();
+	$tmpNode->loadHtmlFile($template);
+	while ($element->hasChildNodes()) {
+		$element->removeChild($element->firstChild);
+	}
+	$tmpContent = $element->ownerDocument->importNode($tmpNode->documentElement, true);
+	$element->appendChild($tmpContent);
+	return $tmpContent;
 }

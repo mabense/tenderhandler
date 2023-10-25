@@ -5,13 +5,12 @@ if ($dom) {
 
     // Add toolbar
     $toolbarTag = $dom->getElementById("toolbar");
-    domSetInnerHTML($toolbarTag, domMakeToolbar([
-        "log_in",
+    domElementFillWithString($toolbarTag, domMakeToolbar([
         "sign_up", 
-        "neverland"
+        "jobs"
     ]));
 
     // Add content
     $contentTag = $dom->getElementById("content");
-    $contentTag->textContent = "login works";
+    domElementFillWithTemplate($contentTag, ELEM_DIR . "log_in.htm"); 
 }

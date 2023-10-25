@@ -4,10 +4,10 @@
     --text: navy;
     --bg-accent: navy;
     --text-accent: palegoldenrod;
-    --bg-overlay: rgba(0, 0, 0, .25);
-    --text-overlay: black;
-    --bg-error: rgba(255, 255, 255, .25);
-    --text-error: red;
+    --bg-overlay: darkgrey;
+    --text-overlay: white;
+    --bg-error: red;
+    --text-error: white;
 }
 
 body {

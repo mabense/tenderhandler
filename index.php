@@ -1,41 +1,41 @@
 <?php
 require_once("./__prologue.php");
 
-// Session setup
-
 haveSession(DEFAULT_PAGE);
 $page = getPage();
 $pageTitle = pageTitle($page);
 $pagePath = PAGE_DIR . $page . ".php";
-// pushFeedbackToLog("Page=" . $page);
 
-// DOM start
+$dom = new DOMDocument();
 
-$dom = domStart();
+if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
-// Fetch page
+    // Set title
 
-require_once($pagePath);
+    $titleTag = $dom->getElementsByTagName("title")[0];
+    $titleTag->textContent .= " - " . $pageTitle;
 
-// DOM finish
+    // Fetch page
 
-$feedback = getFeedbackLog();
-resetFeedbackLog();
-if ($feedback !== false) {
-    $feedbackTag = $dom->getElementById("feedback");
-    foreach ($feedback as $line) {
-        $message = $line[0];
-        $isError = $line[1];
-        $div = $dom->createElement("div");
-        $classList = $div->getAttribute("class");
-        $class = $isError ? "errorMsg" : "feedbackMsg";
-        $div->setAttribute("class", $classList . " " . $class);
-        $div->textContent = $message;
-        $feedbackTag->appendChild($div);
+    require_once($pagePath);
+
+    // Pop feedback
+
+    $feedback = getFeedbackLog();
+    resetFeedbackLog();
+    if ($feedback !== false) {
+        $feedbackTag = $dom->getElementById("feedback");
+        foreach ($feedback as $line) {
+            $message = $line[0];
+            $isError = $line[1];
+            $div = $dom->createElement("div");
+            $classList = $div->getAttribute("class");
+            $class = $isError ? "errorMsg" : "feedbackMsg";
+            $div->setAttribute("class", $classList . " " . "row" . " " . $class);
+            $div->textContent = $message;
+            $feedbackTag->appendChild($div);
+        }
     }
 }
+
 echo $dom->saveHTML();
-
-// Session cleanup
-
-// session_destroy();

@@ -13,6 +13,10 @@ body,
     padding: 1.5vw;
 }
 
+#content > * {
+    margin: .42em;
+}
+
 #feedback>* {
     padding: 0.5vw;
 }
@@ -34,12 +38,36 @@ body,
 
 #toolbar {
     top: 0;
+    justify-content: left;
+}
+
+#toolbar>* {
+    max-width: 25%;
 }
 
 #content {
     height: 100%;
+    padding: 0 20% 0;
+    /* border: 3px dashed red; */
 }
 
 #feedback {
     bottom: 0;
+}
+
+.column, 
+.row {
+    display: flex;
+    margin: 1px;
+    object-fit: scale-down;
+}
+
+.column {
+    flex-flow: column nowrap;
+    align-items: center;
+}
+
+.row {
+    flex-flow: row nowrap;
+    justify-content: space-evenly;
 }
