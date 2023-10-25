@@ -1,5 +1,5 @@
 <?php
-define("ROOT", "." . DIRECTORY_SEPARATOR);
+define("ROOT", ".." . DIRECTORY_SEPARATOR);
 
 define("ELEM_DIR", ROOT . "elements" . DIRECTORY_SEPARATOR);
 define("LIB_DIR", ROOT . "libraries" . DIRECTORY_SEPARATOR);

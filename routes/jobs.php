@@ -3,4 +3,5 @@ require_once("./__prologue.php");
 
 haveSession(DEFAULT_PAGE);
 setPage("jobs");
-refresh();
+header("Location: " . ROOT);
+exit;
