@@ -1,8 +1,9 @@
 <?php
-require_once("./__prologue.php");
+require_once("./__prologue2.php");
 
 haveSession(DEFAULT_PAGE);
 $page = $_GET["r"];
 $title = pageTitle($page);
 pushFeedbackToLog("\"" . $title . "\" not found.", true);
-refresh();
+header("Location: " . ROOT);
+exit;
