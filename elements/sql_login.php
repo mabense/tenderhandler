@@ -3,19 +3,27 @@ require_once("./__prologue2.php");
 require_once(LIB_DIR . "sql.php");
 
 haveSession(DEFAULT_PAGE);
+$user = false;
 
-$conn = dbConn();
+$email = $_POST["user"];
+$pwd = $_POST["pwd"];
 
-
-
-$sql = "SELECT * FROM USER";
-$data = dbQuery($sql, $conn);
-while ($row = mysqli_fetch_assoc($data)) {
-    $feedback = _sqlRowDump($row);
-    pushFeedbackToLog($feedback);
+if (
+    isset($email)
+    && isset($pwd)
+) {
+    $conn = sqlConnect();
+    $user = sqlLogin($email, $pwd);
+    if ($user) {
+        pushFeedbackToLog($user["name"]);
+    }
+    sqlDisconnect();
 }
 
-$conn->close();
-
+if ($user) {
+    pushFeedbackToLog("Logged in successfully.");
+} else {
+    pushFeedbackToLog("Failed to log in.", true);
+}
 header("Location: " . ROOT);
 exit;

@@ -3,7 +3,7 @@ require_once("./__prologue2.php");
 require_once(LIB_DIR . "sql.php");
 
 haveSession(DEFAULT_PAGE);
-$data = "";
+$result = false;
 
 $email = $_POST["user"];
 $pwd = $_POST["pwd"];
@@ -15,12 +15,17 @@ if (
     && isset($pwd)
     && isset($repwd)
     && isset($name)
-    //&& strcmp($pwd, $repwd)
+    && ($pwd === $repwd)
 ) {
-    $conn = dbConn();
-    $data = dbSignup($email, $pwd, $name, false);
-    pushFeedbackToLog($data ? "Signed up successfully." : "Failed to sign up.");
-    $conn->close();
+    $conn = sqlConnect();
+    $result = sqlSignup($email, $pwd, $name, false);
+    sqlDisconnect();
 }
-header("Location: ../");
+
+if ($result) {
+    pushFeedbackToLog("Signed up successfully.");
+} else {
+    pushFeedbackToLog("Failed to sign up.", true);
+}
+header("Location: " . ROOT);
 exit;
