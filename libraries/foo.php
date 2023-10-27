@@ -19,14 +19,36 @@ function haveSession($defaultPage)
 	}
 }
 
+function getUserEmail()
+{
+	return $_SESSION["uEmail"];
+}
+
+function getUserName()
+{
+	return $_SESSION["uName"];
+}
+
+function isUserAdmin()
+{
+	return $_SESSION["uAdmin"];
+}
+
+function setUser($userEmail, $userName, $isAdmin)
+{
+	$_SESSION["uEmail"] = $userEmail;
+	$_SESSION["uName"] = $userName;
+	$_SESSION["uAdmin"] = $isAdmin;
+}
+
 function getPage()
 {
 	return $_SESSION["page"];
 }
 
-function setPage($defaultPage)
+function setPage($page)
 {
-	$_SESSION["page"] = $defaultPage;
+	$_SESSION["page"] = $page;
 }
 
 function getFeedbackLog()

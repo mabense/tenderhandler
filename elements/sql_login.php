@@ -14,13 +14,11 @@ if (
 ) {
     $conn = sqlConnect();
     $user = sqlLogin($email, $pwd);
-    if ($user) {
-        pushFeedbackToLog($user["name"]);
-    }
     sqlDisconnect();
 }
 
 if ($user) {
+    setUser($user["email"], $user["name"], $user["is_admin"]);
     pushFeedbackToLog("Logged in successfully.");
 } else {
     pushFeedbackToLog("Failed to log in.", true);

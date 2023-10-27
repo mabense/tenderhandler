@@ -1,23 +1,28 @@
 <?php
 
+// User
+
+function passwordCompare($one, $other) {
+
+}
+
 function sqlLogin($email, $password)
 {
     global $conn;
 
-    $fields = "`password`, `name`";
+    $fields = "`email`, `password`, `name`";
     $sql = "SELECT $fields FROM USER WHERE `email`=?";
+    
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $email);
     $stmt->execute();
     $result = $stmt->get_result();
 
     $user = $result->fetch_assoc();
-    $userPwd = $user["password"];
 
-    if($password != $userPwd) {
-        return false;
-    }
-    return $user;
+    $pwdMatch = passwordCompare($password, $user["password"]);
+    
+    return $pwdMatch ? $user : false;
 }
 
 function sqlSignup($email, $password, $name, $isAdmin)
