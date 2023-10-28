@@ -41,6 +41,14 @@ function setUser($userEmail, $userName, $isAdmin)
 	$_SESSION["uAdmin"] = $isAdmin;
 }
 
+function resetUser() {
+	setUser("", "", false);
+	unset($_SESSION["uEmail"]);
+	unset($_SESSION["uName"]);
+	unset($_SESSION["uAdmin"]);
+	return !isset($_SESSION["uEmail"]);
+}
+
 function getPage()
 {
 	return $_SESSION["page"];
@@ -49,6 +57,10 @@ function getPage()
 function setPage($page)
 {
 	$_SESSION["page"] = $page;
+}
+
+function isThereFeedback() {
+	return (is_array($_SESSION["log"]) && sizeof($_SESSION["log"]) > 0);
 }
 
 function getFeedbackLog()

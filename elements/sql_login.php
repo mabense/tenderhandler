@@ -19,8 +19,9 @@ if (
 
 if ($user) {
     setUser($user["email"], $user["name"], $user["is_admin"]);
+    setPage("home");
     pushFeedbackToLog("Logged in successfully.");
-} else {
+} elseif (!isThereFeedback()) {
     pushFeedbackToLog("Failed to log in.", true);
 }
 header("Location: " . ROOT);

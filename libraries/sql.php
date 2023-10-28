@@ -2,39 +2,105 @@
 
 // User
 
-function passwordCompare($one, $other) {
+function passwordStrong($password)
+{
+    $isStrong = false;
+    if (
+        strlen($password) > 0
+    ) {
+        $isStrong = true;
+    }
+    return $isStrong;
+}
 
+function passwordCompare($one, $other)
+{
+    return $one == $other;
+}
+
+function sqlLogout($email)
+{
+    global $conn;
+    $success = true;
+
+    $changes = "`now_active`=FALSE, `last_active`=CURRENT_DATE WHERE `email`=?";
+    $setActive = "UPDATE USER SET $changes";
+    $stmt = $conn->prepare($setActive);
+    $stmt->bind_param('s', $email);
+    if (!$stmt->execute()) {
+        pushFeedbackToLog("Sorry, the connection failed.", true);
+        $success = false;
+    }
+    if (!resetUser()) {
+        pushFeedbackToLog("Session error. Please, delete cookies and refresh page.", true);
+        $success = false;
+    }
+
+    return $success;
 }
 
 function sqlLogin($email, $password)
 {
     global $conn;
 
-    $fields = "`email`, `password`, `name`";
+    $fields = "`email`, `password`, `name`, `is_admin`";
     $sql = "SELECT $fields FROM USER WHERE `email`=?";
-    
+
     $stmt = $conn->prepare($sql);
     $stmt->bind_param('s', $email);
-    $stmt->execute();
-    $result = $stmt->get_result();
+    if (!$stmt->execute()) {
+        pushFeedbackToLog("Sorry, the connection failed.", true);
+        return false;
+    }
 
+    $result = $stmt->get_result();
     $user = $result->fetch_assoc();
 
+    $uExists = ($user !== null);
+
     $pwdMatch = passwordCompare($password, $user["password"]);
-    
-    return $pwdMatch ? $user : false;
+
+    $changes = "`now_active`=TRUE, `last_active`=CURRENT_DATE WHERE `email`=?";
+    $setActive = "UPDATE USER SET $changes";
+    $stmt2 = $conn->prepare($setActive);
+    $stmt2->bind_param('s', $email);
+    if (!$stmt2->execute()) {
+        pushFeedbackToLog("Sorry, the connection failed.", true);
+        return false;
+    }
+
+    if (!$uExists || !$pwdMatch) {
+        pushFeedbackToLog("Incorrect email address or password.", true);
+        return false;
+    }
+
+    return ($uExists && $pwdMatch) ? $user : false;
 }
 
-function sqlSignup($email, $password, $name, $isAdmin)
+function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
 {
     global $conn;
-    $success = false;
-    $fields = "(`email`, `password`, `name`, `is_admin`)";
-    $adminBool = ($isAdmin ? "TRUE" : "FALSE");
-    $sql = "INSERT INTO USER $fields VALUES (?, ?, ?, $adminBool)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sss", $email, $password, $name);
-    $success = $stmt->execute();
+    $success = true;
+
+    if (!passwordStrong($password)) {
+        pushFeedbackToLog("Password is too weak.", true);
+        $success = false;
+    }
+    if (!passwordCompare($password, $passwordAgain)) {
+        pushFeedbackToLog("The passwords don't match.", true);
+        $success = false;
+    }
+    if ($success) {
+        $fields = "(`email`, `password`, `name`, `is_admin`)";
+        $adminBool = ($isAdmin ? "TRUE" : "FALSE");
+        $sql = "INSERT INTO USER $fields VALUES (?, ?, ?, $adminBool)";
+        $stmt = $conn->prepare($sql);
+        $stmt->bind_param("sss", $email, $password, $name);
+        if (!$stmt->execute()) {
+            pushFeedbackToLog("Sorry, the connection failed.", true);
+            $success = false;
+        }
+    }
     return $success;
 }
 

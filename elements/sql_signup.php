@@ -15,16 +15,15 @@ if (
     && isset($pwd)
     && isset($repwd)
     && isset($name)
-    && ($pwd === $repwd)
 ) {
     $conn = sqlConnect();
-    $result = sqlSignup($email, $pwd, $name, false);
+    $result = sqlSignup($email, $pwd, $repwd, $name, false);
     sqlDisconnect();
 }
 
 if ($result) {
     pushFeedbackToLog("Signed up successfully.");
-} else {
+} elseif(!isThereFeedback()) {
     pushFeedbackToLog("Failed to sign up.", true);
 }
 header("Location: " . ROOT);
