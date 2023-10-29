@@ -41,7 +41,8 @@ function setUser($userEmail, $userName, $isAdmin)
 	$_SESSION["uAdmin"] = $isAdmin;
 }
 
-function resetUser() {
+function resetUser()
+{
 	setUser("", "", false);
 	unset($_SESSION["uEmail"]);
 	unset($_SESSION["uName"]);
@@ -59,7 +60,8 @@ function setPage($page)
 	$_SESSION["page"] = $page;
 }
 
-function isThereFeedback() {
+function isThereFeedback()
+{
 	return (is_array($_SESSION["log"]) && sizeof($_SESSION["log"]) > 0);
 }
 
@@ -89,6 +91,26 @@ function resetFeedbackLog()
 }
 
 // DOM
+
+function domMakeToolbarLoggedIn()
+{
+	$str = '';
+	if (isUserAdmin()) {
+		$str = domMakeToolbar([
+			"log_out", 
+			"schedule", // list months >> list milestones >> view milestone >> view document >> download
+			"tenders", // list tenders >> list milestones >> view milestone >> view document >> download
+			"managers" // list managers >> view manager >> list milestones >> view milestone >> view document >> download
+		]);
+	} else {
+		$str = domMakeToolbar([
+			"log_out", 
+			"schedule", // list months >> list milestones >> view milestone >> view document >> upload/download
+			"tenders" // list tenders >> list milestones >> view milestone >> view document >> upload/download
+		]);
+	}
+	return $str;
+}
 
 function domMakeToolbar($pages)
 {

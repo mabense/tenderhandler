@@ -5,9 +5,7 @@ if ($dom) {
 
     // Add toolbar
     $toolbarTag = $dom->getElementById("toolbar");
-    domElementFillWithString($toolbarTag, domMakeToolbar([
-        "log_out"
-    ]));
+    domElementFillWithString($toolbarTag, domMakeToolbarLoggedIn());
 
     // Add content
     $contentTag = $dom->getElementById("content");
