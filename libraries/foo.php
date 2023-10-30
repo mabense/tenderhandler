@@ -117,16 +117,20 @@ function domMakeToolbar($pages)
 	$str = '';
 	if (is_array($pages)) {
 		foreach ($pages as $page) {
-			$route = './routes/' . $page . '.php';
-			if (file_exists($route)) {
-				$str .= '<a href="' . $route . '">';
-			} else {
-				$str .= '<a href="./routes/not_found.php?r=' . $page . '">';
-			}
-			$str .= pageTitle($page) . '</a>';
+			$route = domFindRoute($page);
+			$title = pageTitle($page);
+			$str .= '<a href="' . $route . '">' . $title . '</a>';
 		}
 	}
 	return $str;
+}
+
+function domFindRoute($page) {
+	$route = './routes/' . $page . '.php';
+	if (file_exists($route)) {
+		return $route;
+	}
+	return './routes/not_found.php?r=' . $page;
 }
 
 function domElementFillWithString($element, $string)

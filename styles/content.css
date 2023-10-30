@@ -25,3 +25,31 @@ input[type=submit] {
     width: 60%;
     height: 3em;
 }
+
+table {
+    width: 100%;
+    height: fit-content;
+    border: 2px solid black;
+    text-align: left;
+}
+
+th {
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+.odd_row {
+    background-color: lightgray;
+    color: black;
+}
+
+.even_row {
+    background-color: darkgray;
+    color: black;
+}
+
+.odd_row:hover, 
+.even_row:hover {
+    background-color: var(--bg-accent);
+    color: var(--text-accent);
+}

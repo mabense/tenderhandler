@@ -1,5 +1,70 @@
 <?php
 
+// Tender
+function sqlQueryPage($title, $sql, $tabelColumns=[])
+{
+    global $dom;
+    global $conn;
+
+    // Add toolbar
+    $toolbarTag = $dom->getElementById("toolbar");
+    domElementFillWithString($toolbarTag, domMakeToolbarLoggedIn());
+
+    // Add content
+    $contentTag = $dom->getElementById("content");
+    domElementFillWithTemplate($contentTag, ELEM_DIR . "sql_result.htm");
+
+    if (!$conn) {
+        pushFeedbackToLog('Connection missing in sqlQueryPage($title, $sql).', true);
+        return $contentTag;
+    }
+
+    // Set title
+    $titleTag = $dom->getElementById("contentTitle");
+    $titleTag->textContent = $title;
+
+    // Fill table with results
+    $tableTag = $dom->getElementById("contentTable");
+    $table = "";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if($result) {
+        foreach($tabelColumns as $header) {
+            $table .= "<th>" . $header . "</th>";
+        }
+        $isOddRow = true;
+        while ($row = $result->fetch_assoc()) {
+            $table .= $isOddRow ? "<tr class='odd_row'>" : "<tr class='even_row'>";
+            foreach ($row as $attr) {
+                $table .= "<td>";
+                $table .= $attr;
+                $table .= "</td>";
+            }
+            $table .= "</tr>";
+            $isOddRow = !$isOddRow;
+        }
+    }
+    domElementFillWithString($tableTag, $table);
+
+    return $contentTag;
+}
+
+function sqlListMonths()
+{
+    return "Table: Query Results Per Month";
+}
+
+function sqlListTenders()
+{
+    return "Table: Query Results Per Tender";
+}
+
+function sqlListManagers()
+{
+    return "Table: Query Results Per Manager";
+}
+
 // User
 
 function passwordStrong($password)
