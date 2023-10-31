@@ -13,8 +13,8 @@ if ($dom) {
             "code", 
             "begins", 
             "ends", 
-            "sum_asked", 
-            "sum_granted", 
+            "proposed", 
+            "granted", 
             "topic_id", 
             "manager"
         ]

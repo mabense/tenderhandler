@@ -1,7 +1,30 @@
 <?php
 
-// Tender
-function sqlQueryPage($title, $sql, $tabelColumns=[])
+// Logged in
+
+function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
+{
+    global $conn;
+    if (!$conn) {
+        pushFeedbackToLog("No DB connection.", true);
+        return false;
+    }
+    $success = true;
+
+    // $sql = "INSERT INTO TENDER (`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`) VALUES ('proba_5','2020-02-02','2023-12-12',100,10,'q')";
+
+    $fields = "(`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`)";
+    $sql = "INSERT INTO TENDER $fields VALUES (?, ?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("sssiis", $code, $begin, $end, $asked, $granted, $manager);
+    if (!$stmt->execute()) {
+        pushFeedbackToLog("Sorry, the connection failed.", true);
+        $success = false;
+    }
+    return $success;
+}
+
+function sqlQueryPage($title, $sql, $tabelColumns = [])
 {
     global $dom;
     global $conn;
@@ -29,8 +52,8 @@ function sqlQueryPage($title, $sql, $tabelColumns=[])
     $stmt = $conn->prepare($sql);
     $stmt->execute();
     $result = $stmt->get_result();
-    if($result) {
-        foreach($tabelColumns as $header) {
+    if ($result) {
+        foreach ($tabelColumns as $header) {
             $table .= "<th>" . $header . "</th>";
         }
         $isOddRow = true;
@@ -48,21 +71,6 @@ function sqlQueryPage($title, $sql, $tabelColumns=[])
     domElementFillWithString($tableTag, $table);
 
     return $contentTag;
-}
-
-function sqlListMonths()
-{
-    return "Table: Query Results Per Month";
-}
-
-function sqlListTenders()
-{
-    return "Table: Query Results Per Tender";
-}
-
-function sqlListManagers()
-{
-    return "Table: Query Results Per Manager";
 }
 
 // User
