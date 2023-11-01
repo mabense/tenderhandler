@@ -1,0 +1,83 @@
+:root {
+    --darkest: black;
+    --darker: darkgray;
+    --dark: lightgray;
+    --lightest: white;
+
+    --table-bordercolor: var(--darkest);
+    --table-odd-bg: var(--dark);
+    --table-odd: var(--table-bordercolor);
+    --table-even-bg: var(--darker);
+    --table-even: var(--table-bordercolor);
+
+    --link-bordercolor: var(--text);
+    --link-bg: var(--bg);
+    --link-text: var(--text);
+
+    --link-bordercolor-hover: var(--bg-accent);
+    --link-bg-hover: var(--bg-accent);
+    --link-text-hover: var(--text-accent);
+
+    --link-bordercolor-active: var(--darkest);
+    --link-bg-active: var(--darkest);
+    --link-text-active: var(--lightest);
+
+}
+
+#content {
+    padding: 0 3em 3em;
+}
+
+#contentTable {
+    width: 100%;
+    border: 2px solid var(--table-bordercolor);
+    text-align: left;
+}
+
+#contentTable th {
+    height: fit-content;
+    background-color: var(--bg);
+    color: var(--text);
+}
+
+#contentButtons {
+    width: 100%;
+    border: 2px solid var(--link-bordercolor);
+}
+
+#contentButtons > * {
+    width: 90%;
+}
+
+.odd_row {
+    background-color: var(--table-odd-bg);
+    color: var(--table-odd);
+}
+
+.even_row {
+    background-color: var(--table-even-bg);
+    color: var(--table-even);
+}
+
+.a_button,
+.a_button:link,
+.a_button:visited {
+    background-color: var(--link-bg);
+    color: var(--link-text);
+}
+
+.odd_row:hover,
+.even_row:hover,
+.a_button:hover {
+    border-color: var(--link-bg-hover);
+    background-color: var(--link-bg-hover);
+    color: var(--link-text-hover);
+}
+
+.odd_row:active,
+.even_row:active,
+#contentButtons:active .a_button:active {
+    border-color: var(--darkest);
+    background-color: var(--darkest);
+    color: var(--lightest);
+}

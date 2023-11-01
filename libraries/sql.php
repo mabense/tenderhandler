@@ -31,6 +31,12 @@ function sqlQueryPage($title, $sql, $tabelColumns = [])
     global $dom;
     global $conn;
 
+    $head = ($dom->getElementsByTagName("head"))->item(0);
+    $cssLink = $dom->createElement("link");
+    $cssLink->setAttribute("rel", "stylesheet");
+    $cssLink->setAttribute("href", "styles/query_page.css");
+    $head->appendChild($cssLink);
+
     // Add toolbar
     $toolbarTag = $dom->getElementById("toolbar");
     domElementFillWithString($toolbarTag, domMakeToolbarLoggedIn());

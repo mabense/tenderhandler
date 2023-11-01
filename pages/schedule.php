@@ -15,4 +15,7 @@ if ($dom) {
         ]
     );
     sqlDisconnect();
+    
+    $buttons = $dom->getElementById("contentButtons");
+    $buttons->parentNode->removeChild($buttons);
 }
