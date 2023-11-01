@@ -1,12 +1,13 @@
 <?php
 
+
 // Logged in
+
 
 function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 {
     global $conn;
-    if (!$conn) {
-        pushFeedbackToLog("No DB connection.", true);
+    if (!sqlConnFound(__FUNCTION__)) {
         return false;
     }
     $success = true;
@@ -23,6 +24,7 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
     }
     return $success;
 }
+
 
 function sqlQueryPage($title, $sql, $tabelColumns = [])
 {
@@ -73,7 +75,9 @@ function sqlQueryPage($title, $sql, $tabelColumns = [])
     return $contentTag;
 }
 
+
 // User
+
 
 function passwordStrong($password)
 {
@@ -86,14 +90,50 @@ function passwordStrong($password)
     return $isStrong;
 }
 
+
 function passwordCompare($one, $other)
 {
     return $one == $other;
 }
 
+
 function sqlLogout($email)
 {
+    /* */
+    $changes = "`now_active`=FALSE, `last_active`=CURRENT_DATE";
+    $setInactive = "UPDATE USER SET $changes WHERE `email`=?";
+    $success = sqlPrepareBindExecute(
+        $setInactive, 
+        "s", 
+        [$email], 
+        __FUNCTION__
+    );
+    if (!resetUser()) {
+        pushFeedbackToLog("Session error. Please, delete cookies and refresh page.", true);
+        $success = false;
+    }
+    return $success;
+    /*/
+    $changes = "`now_active`=FALSE, `last_active`=CURRENT_DATE";
+    $setInactive = "UPDATE USER SET $changes WHERE `email`=?";
+    $success = sqlPrepareBindExecute(
+        $setInactive,
+        "s", 
+        [$email], 
+        __FUNCTION__
+    );
+    if (!$success) {
+        return false;
+    }
+    return true;
+    /* */
+
+    /* * /
     global $conn;
+    if (!sqlConnFound(__FUNCTION__)) {
+        return false;
+    }
+
     $success = true;
 
     $changes = "`now_active`=FALSE, `last_active`=CURRENT_DATE WHERE `email`=?";
@@ -110,10 +150,42 @@ function sqlLogout($email)
     }
 
     return $success;
+    /* */
 }
+
 
 function sqlLogin($email, $password)
 {
+    /* */
+    $fields = "`email`, `password`, `name`, `is_admin`";
+    $sql = "SELECT $fields FROM USER WHERE `email`=?";
+    $stmt = sqlPrepareBindExecute(
+        $sql, 
+        "s", 
+        [$email], 
+        __FUNCTION__
+    );
+    $result = $stmt->get_result();
+    $user = $result->fetch_assoc();
+
+    $uExists = ($user !== null);
+    $pwdMatch = passwordCompare($password, $user["password"]);
+    if (!$uExists || !$pwdMatch) {
+        pushFeedbackToLog("Incorrect email address or password.", true);
+        return false;
+    }
+    
+    $changes = "`now_active`=TRUE, `last_active`=CURRENT_DATE";
+    $setActive = "UPDATE USER SET $changes WHERE `email`=?";
+    $stmt2 = sqlPrepareBindExecute(
+        $setActive, 
+        "s", 
+        [$email], 
+        __FUNCTION__
+    );
+
+    return ($uExists && $pwdMatch && $stmt2) ? $user : false;
+    /*/
     global $conn;
 
     $fields = "`email`, `password`, `name`, `is_admin`";
@@ -148,10 +220,32 @@ function sqlLogin($email, $password)
     }
 
     return ($uExists && $pwdMatch) ? $user : false;
+    /* */
 }
+
 
 function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
 {
+    /* */
+    if (!passwordStrong($password)) {
+        pushFeedbackToLog("Password is too weak.", true);
+        return false;
+    }
+    if (!passwordCompare($password, $passwordAgain)) {
+        pushFeedbackToLog("The passwords don't match.", true);
+        return false;
+    }
+    $fields = "(`email`, `password`, `name`, `is_admin`)";
+    $adminBool = ($isAdmin ? "TRUE" : "FALSE");
+    $sql = "INSERT INTO USER $fields VALUES (?, ?, ?, $adminBool)";
+    $stmt = sqlPrepareBindExecute(
+        $sql, 
+        "sss", 
+        [$email, $password, $name], 
+        __FUNCTION__
+    );
+    return $stmt;
+    /*/
     global $conn;
     $success = true;
 
@@ -175,9 +269,90 @@ function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
         }
     }
     return $success;
+    /* */
 }
 
+
+// Query
+
+
+function sqlConnFound($__FUNCTION__)
+{
+    global $conn;
+    if (!$conn) {
+        pushFeedbackToLog($__FUNCTION__ . ": " . "Connection lost.", true);
+        return false;
+    }
+    return true;
+}
+
+
+function sqlPrepareExecute($sql, $__FUNCTION__)
+{
+    global $conn;
+    if (!sqlConnFound($__FUNCTION__)) {
+        return false;
+    }
+    $stmt = $conn->prepare($sql);
+    if (!$stmt->execute()) {
+        pushFeedbackToLog($__FUNCTION__ . ": " . $stmt->error, true);
+        return false;
+    }
+    return $stmt;
+}
+
+
+function sqlPrepareBindExecute($sql, $types, $params, $__FUNCTION__)
+{
+    global $conn;
+    if (!sqlConnFound($__FUNCTION__)) {
+        return false;
+    }
+    $stmt = $conn->prepare($sql);
+    // array_push($params, "HIBA");
+    $stmt->bind_param($types, ...$params);
+    if (!$stmt->execute()) {
+        pushFeedbackToLog($__FUNCTION__ . ": " . $stmt->error, true);
+        return false;
+    }
+    return $stmt;
+}
+
+
+// function sqlPrepareExecute($sql, $callerFunctionName)
+// {
+//     global $conn;
+//     if (!sqlConnFound($callerFunctionName . ": " . __FUNCTION__)) {
+//         return false;
+//     }
+//     $stmt = $conn->prepare($sql);
+//     if (!$stmt->execute()) {
+//         pushFeedbackToLog($callerFunctionName . ": " . $stmt->error, true);
+//         return false;
+//     }
+//     return $stmt->get_result();
+// }
+
+
+// function sqlPrepareBindExecute($sql, $paramTypes, $paramArray, $callerFunctionName)
+// {
+//     global $conn;
+//     if (!sqlConnFound($callerFunctionName . ": " . __FUNCTION__)) {
+//         return false;
+//     }
+//     $stmt = $conn->prepare($sql);
+//     $stmt->bind_param($paramTypes, ...$paramArray);
+//     if (!$stmt->execute()) {
+//         pushFeedbackToLog($callerFunctionName . ": " . $stmt->error, true);
+//         return false;
+//     }
+//     $result =  $stmt->get_result();
+//     return $result;
+// }
+
+
 // Connection
+
 
 function sqlConnect()
 {
@@ -188,14 +363,6 @@ function sqlConnect()
     return $conn;
 }
 
-function sqlQuery($sql)
-{
-    global $conn;
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    return $result;
-}
 
 function sqlDisconnect()
 {
@@ -203,7 +370,9 @@ function sqlDisconnect()
     $conn->close();
 }
 
+
 // Debug
+
 
 function _sqlRowDump($sqlAssoc)
 {
@@ -214,6 +383,7 @@ function _sqlRowDump($sqlAssoc)
     return $str;
 }
 
+
 function _sqlDump($sqlResult, $rowSeparator)
 {
     $str = "";
@@ -222,6 +392,7 @@ function _sqlDump($sqlResult, $rowSeparator)
     }
     return $str;
 }
+
 
 function _sqlTest()
 {

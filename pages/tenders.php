@@ -23,8 +23,14 @@ if ($dom) {
 
     // Add button
     if(isUserAdmin()) {
-        $addButton = $dom->createElement("a", "Add new tender");
-        $addButton->setAttribute("href", domFindRoute("new_tender"));
-        $contentTag->appendChild($addButton);
+        $addTender = $dom->createElement("a", "Add new tender");
+        $addTender->setAttribute("class", "a_button");
+        $addTender->setAttribute("href", domFindRoute("new_tender"));
+        $contentTag->appendChild($addTender);
+        
+        $addTopic = $dom->createElement("a", "Add new topic");
+        $addTopic->setAttribute("class", "a_button");
+        $addTopic->setAttribute("href", domFindRoute("new_topic"));
+        $contentTag->appendChild($addTopic);
     }
 }

@@ -1,5 +1,31 @@
+:root {
+    --darkest: black;
+    --darker: darkgray;
+    --dark: lightgray;
+    --lightest: white;
+
+    --table-bordercolor: var(--darkest);
+    --table-odd-bg: var(--dark);
+    --table-odd: var(--table-bordercolor);
+    --table-even-bg: var(--darker);
+    --table-even: var(--table-bordercolor);
+
+    --link-bordercolor: var(--text);
+    --link-bg: var(--bg);
+    --link-text: var(--text);
+
+    --link-bordercolor-hover: var(--bg-accent);
+    --link-bg-hover: var(--bg-accent);
+    --link-text-hover: var(--text-accent);
+
+    --link-bordercolor-active: var(--darkest);
+    --link-bg-active: var(--darkest);
+    --link-text-active: var(--lightest);
+
+}
+
 body {
-    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
     font-weight: bolder;
     font-variant: small-caps;
     letter-spacing: .2em;
@@ -29,7 +55,7 @@ input[type=submit] {
 table {
     width: 100%;
     height: fit-content;
-    border: 2px solid black;
+    border: 2px solid var(--table-bordercolor);
     text-align: left;
 }
 
@@ -39,17 +65,35 @@ th {
 }
 
 .odd_row {
-    background-color: lightgray;
-    color: black;
+    background-color: var(--table-odd-bg);
+    color: var(--table-odd);
 }
 
 .even_row {
-    background-color: darkgray;
-    color: black;
+    background-color: var(--table-even-bg);
+    color: var(--table-even);
 }
 
-.odd_row:hover, 
-.even_row:hover {
-    background-color: var(--bg-accent);
-    color: var(--text-accent);
+.a_button,
+.a_button:link,
+.a_button:visited {
+    border: 2px solid var(--link-bordercolor);
+    background-color: var(--link-bg);
+    color: var(--link-text);
+}
+
+.odd_row:hover,
+.even_row:hover,
+.a_button:hover {
+    border-color: var(--link-bg-hover);
+    background-color: var(--link-bg-hover);
+    color: var(--link-text-hover);
+}
+
+.odd_row:active,
+.even_row:active,
+.a_button:active {
+    border-color: var(--darkest);
+    background-color: var(--darkest);
+    color: var(--lightest);
 }
