@@ -14,6 +14,7 @@ if ($user) {
         setPage("log_in");
     } elseif (!isThereFeedback()) {
         pushFeedbackToLog("Failed to log out.", true);
+        pushFeedbackToLog("user: " . $user . " --- sqlLogout($user): " . $out);
     }
 }
 header("Location: " . ROOT);
