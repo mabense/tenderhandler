@@ -29,3 +29,8 @@ body {
     background-color: var(--bg-error);
     color: var(--text-error);
 }
+
+label select option {
+    background-color: var(--bg);
+    color: var(--text);
+}

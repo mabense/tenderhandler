@@ -17,6 +17,7 @@ label {
     text-align: left;
 }
 
+label select, 
 label input {
     width: 100%;
     height: 2em;
