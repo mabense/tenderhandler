@@ -1,35 +1,43 @@
 <?php
 
 
-// Logged in
+// Tender
+
+
+function sqlNewTopic($id, $title, $purpose)
+{
+    $fields = "(`id`, `title`, `purpose`)";
+    $sql = "INSERT INTO TOPIC $fields VALUES (?, ?, ?)";
+    $success = sqlPrepareBindExecute(
+        $sql, 
+        "sss", 
+        [$id, $title, $purpose], 
+        __FUNCTION__
+    );
+    return $success;
+}
 
 
 function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 {
-    global $conn;
-    if (!sqlConnFound(__FUNCTION__)) {
-        return false;
-    }
-    $success = true;
-
-    // $sql = "INSERT INTO TENDER (`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`) VALUES ('proba_5','2020-02-02','2023-12-12',100,10,'q')";
-
-    $fields = "(`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`)";
-    $sql = "INSERT INTO TENDER $fields VALUES (?, ?, ?, ?, ?, ?)";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("sssiis", $code, $begin, $end, $asked, $granted, $manager);
-    if (!$stmt->execute()) {
-        pushFeedbackToLog("Sorry, the connection failed.", true);
-        $success = false;
-    }
+    $fields = "(`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `topic_id`, `manager`)";
+    $sql = "INSERT INTO TENDER $fields VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $success = sqlPrepareBindExecute(
+        $sql, 
+        "sssiiss", 
+        [$code, $begin, $end, $asked, $granted, $topic, $manager], 
+        __FUNCTION__
+    );
     return $success;
 }
+
+
+// Query page
 
 
 function sqlQueryPage($title, $sql, $tabelColumns = [])
 {
     global $dom;
-    global $conn;
 
     $head = ($dom->getElementsByTagName("head"))->item(0);
     $cssLink = $dom->createElement("link");
@@ -45,40 +53,78 @@ function sqlQueryPage($title, $sql, $tabelColumns = [])
     $contentTag = $dom->getElementById("content");
     domElementFillWithTemplate($contentTag, ELEM_DIR . "sql_result.htm");
 
-    if (!$conn) {
-        pushFeedbackToLog('Connection missing in sqlQueryPage($title, $sql).', true);
-        return $contentTag;
-    }
-
     // Set title
     $titleTag = $dom->getElementById("contentTitle");
     $titleTag->textContent = $title;
 
-    // Fill table with results
-    $tableTag = $dom->getElementById("contentTable");
-    $table = "";
-    $stmt = $conn->prepare($sql);
-    $stmt->execute();
+    /* */
+    $stmt = sqlPrepareExecute(
+        $sql,
+        __FUNCTION__
+    );
     $result = $stmt->get_result();
-    if ($result) {
-        foreach ($tabelColumns as $header) {
-            $table .= "<th>" . $header . "</th>";
-        }
-        $isOddRow = true;
-        while ($row = $result->fetch_assoc()) {
-            $table .= $isOddRow ? "<tr class='odd_row'>" : "<tr class='even_row'>";
-            foreach ($row as $attr) {
-                $table .= "<td>";
-                $table .= $attr;
-                $table .= "</td>";
-            }
-            $table .= "</tr>";
-            $isOddRow = !$isOddRow;
-        }
+    if (!$result) {
+        return $contentTag;
     }
-    domElementFillWithString($tableTag, $table);
+
+    $tableTag = sqlQueryTable($result, $tabelColumns);
+    $contentTag->appendChild($tableTag);
 
     return $contentTag;
+}
+
+
+function sqlQueryTable($sqlResult, $tabelColumns)
+{
+    global $dom;
+    $tableTag = $dom->getElementById("contentTable");
+
+    $tableHead = $dom->createElement("thead");
+
+    $thRow = $dom->createElement("tr");
+    foreach ($tabelColumns as $header) {
+        $th = $dom->createElement("th");
+        $th->textContent = $header;
+        $thRow->appendChild($th);
+    }
+    $tableHead->appendChild($thRow);
+
+    $tableTag->appendChild($tableHead);
+
+    $tableBody = $dom->createElement("tbody");
+
+    $isOddRow = true;
+    if ($sqlResult->num_rows == 0) {
+        for ($i = 0; $i < 1; $i++) {
+            $tr = $dom->createElement("tr");
+            $tr->setAttribute(
+                "class",
+                "none_row"
+            );
+            foreach ($tabelColumns as $_) {
+                $td = $dom->createElement("td");
+                domElementFillWithString($td, 'none');
+                $tr->appendChild($td);
+            }
+            $tableBody->appendChild($tr);
+        }
+    }
+    while ($row = $sqlResult->fetch_assoc()) {
+        $tr = $dom->createElement("tr");
+        $tr->setAttribute(
+            "class",
+            $isOddRow ? "odd_row" : "even_row"
+        );
+        foreach ($row as $attr) {
+            $td = $dom->createElement("td");
+            $td->textContent = $attr;
+            $tr->appendChild($td);
+        }
+        $tableBody->appendChild($tr);
+        $isOddRow = !$isOddRow;
+    }
+    $tableTag->appendChild($tableBody);
+    return $tableTag;
 }
 
 
@@ -109,9 +155,9 @@ function sqlLogout($email)
     $changes = "`now_active`=FALSE, `last_active`=CURRENT_DATE";
     $setInactive = "UPDATE USER SET $changes WHERE `email`=?";
     $success = sqlPrepareBindExecute(
-        $setInactive, 
-        "s", 
-        [$email], 
+        $setInactive,
+        "s",
+        [$email],
         __FUNCTION__
     );
     if (!resetUser()) {
@@ -166,9 +212,9 @@ function sqlLogin($email, $password)
     $fields = "`email`, `password`, `name`, `is_admin`";
     $sql = "SELECT $fields FROM USER WHERE `email`=?";
     $stmt = sqlPrepareBindExecute(
-        $sql, 
-        "s", 
-        [$email], 
+        $sql,
+        "s",
+        [$email],
         __FUNCTION__
     );
     $result = $stmt->get_result();
@@ -180,13 +226,13 @@ function sqlLogin($email, $password)
         pushFeedbackToLog("Incorrect email address or password.", true);
         return false;
     }
-    
+
     $changes = "`now_active`=TRUE, `last_active`=CURRENT_DATE";
     $setActive = "UPDATE USER SET $changes WHERE `email`=?";
     $stmt2 = sqlPrepareBindExecute(
-        $setActive, 
-        "s", 
-        [$email], 
+        $setActive,
+        "s",
+        [$email],
         __FUNCTION__
     );
 
@@ -243,11 +289,11 @@ function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
     }
     $fields = "(`email`, `password`, `name`, `is_admin`)";
     $adminBool = ($isAdmin ? "TRUE" : "FALSE");
-    $sql = "INSERT INTO USER $fields VALUES (?, ?, ?, $adminBool)";
+    $sql = "INSERT INTO USER $fields VALUES (?, ?, ?, ?)";
     $stmt = sqlPrepareBindExecute(
-        $sql, 
-        "sss", 
-        [$email, $password, $name], 
+        $sql,
+        "sssi",
+        [$email, $password, $name, $adminBool],
         __FUNCTION__
     );
     return $stmt;
@@ -323,38 +369,6 @@ function sqlPrepareBindExecute($sql, $types, $params, $__FUNCTION__)
     }
     return $stmt;
 }
-
-
-// function sqlPrepareExecute($sql, $callerFunctionName)
-// {
-//     global $conn;
-//     if (!sqlConnFound($callerFunctionName . ": " . __FUNCTION__)) {
-//         return false;
-//     }
-//     $stmt = $conn->prepare($sql);
-//     if (!$stmt->execute()) {
-//         pushFeedbackToLog($callerFunctionName . ": " . $stmt->error, true);
-//         return false;
-//     }
-//     return $stmt->get_result();
-// }
-
-
-// function sqlPrepareBindExecute($sql, $paramTypes, $paramArray, $callerFunctionName)
-// {
-//     global $conn;
-//     if (!sqlConnFound($callerFunctionName . ": " . __FUNCTION__)) {
-//         return false;
-//     }
-//     $stmt = $conn->prepare($sql);
-//     $stmt->bind_param($paramTypes, ...$paramArray);
-//     if (!$stmt->execute()) {
-//         pushFeedbackToLog($callerFunctionName . ": " . $stmt->error, true);
-//         return false;
-//     }
-//     $result =  $stmt->get_result();
-//     return $result;
-// }
 
 
 // Connection

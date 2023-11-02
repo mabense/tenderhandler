@@ -15,7 +15,7 @@ if ($dom) {
             "ends", 
             "proposed", 
             "granted", 
-            "topic_id", 
+            "topic", 
             "manager"
         ]
     );
@@ -34,5 +34,9 @@ if ($dom) {
         $addTopic->setAttribute("class", "a_button");
         $addTopic->setAttribute("href", domFindRoute("new_topic"));
         $buttons->appendChild($addTopic);
+    }
+    else {
+        $buttons = $dom->getElementById("contentButtons");
+        $buttons->parentNode->removeChild($buttons);
     }
 }
