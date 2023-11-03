@@ -20,13 +20,12 @@ function domHandleAction()
     $action = $_GET["action"];
     if (isset($action)) {
         $actionPath = "./" . $action . ".php";
-        if(file_exists($actionPath)) {
+        if (file_exists($actionPath)) {
             require_once($actionPath);
             pushFeedbackToLog("\"" . $action . "\" failed.", true);
             header("Location: " . ROOT . PAGE);
             exit;
-        }
-        else {
+        } else {
             pushFeedbackToLog("\"" . $action . "\" not found.", true);
             header("Location: " . ROOT . PAGE);
             exit;
@@ -39,8 +38,22 @@ function domSetTitle($pageTitle)
 {
     $dom = new DOMDocument();
     global $dom;
-    $titleTag = $dom->getElementsByTagName("title")[0];
+    $titleTag = ($dom->getElementsByTagName("title"))->item(0);
     $titleTag->textContent .= " - " . $pageTitle;
+    $contentTitle = $dom->getElementById("contentTitle");
+    $contentTitle->textContent = $pageTitle;
+}
+
+
+function domAddStyle($stylesheet)
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $head = ($dom->getElementsByTagName("head"))->item(0);
+    $cssLink = $dom->createElement("link");
+    $cssLink->setAttribute("rel", "stylesheet");
+    $cssLink->setAttribute("href", $stylesheet);
+    $head->appendChild($cssLink);
 }
 
 
@@ -68,14 +81,14 @@ function domMakeToolbarLoggedIn()
         domMakeToolbar([
             "log_out",
             "schedule", // list months >> list milestones >> view milestone >> view document >> download
-            "tenders", // list tenders >> list milestones >> view milestone >> view document >> download
-            "managers" // list managers >> view manager >> list milestones >> view milestone >> view document >> download
+            "tender_list", // list tenders >> list milestones >> view milestone >> view document >> download
+            "manager_list" // list managers >> view manager >> list milestones >> view milestone >> view document >> download
         ]);
     } else {
         domMakeToolbar([
             "log_out",
             "schedule", // list months >> list milestones >> view milestone >> view document >> upload/download
-            "tenders" // list tenders >> list milestones >> view milestone >> view document >> upload/download
+            "tender_list" // list tenders >> list milestones >> view milestone >> view document >> upload/download
         ]);
     }
 }
@@ -95,8 +108,6 @@ function domAppendTemplateTo($elementID, $template, $clear = false)
     }
     $tmpContent = $element->ownerDocument->importNode($tmpNode->documentElement, true);
     $element->appendChild($tmpContent);
-    $contentTitle = $dom->getElementById("contentTitle");
-    $contentTitle->textContent = toDisplayText(PAGE);
 }
 
 

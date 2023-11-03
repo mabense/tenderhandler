@@ -3,11 +3,7 @@ define("ROOT", ".." . DIRECTORY_SEPARATOR);
 define("PAGE", "home");
 
 require_once(ROOT . "const.php");
-
-require_once(LIB_DIR . "feedback_log.php");
-require_once(LIB_DIR . "session.php");
-require_once(LIB_DIR . "foo.php");
-require_once(LIB_DIR . "dom.php");
+require_once(ROOT . "requirements.php");
 
 haveSession();
 

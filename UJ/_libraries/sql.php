@@ -35,109 +35,93 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 // Query page
 
 
-// function sqlQueryPage($title, $sql, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
-// {
-//     global $dom;
+function sqlQueryContent($sql, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $contentTag = $dom->getElementById("content");
+    /* */
+    $stmt = sqlPrepareExecute(
+        $sql,
+        __FUNCTION__
+    );
+    $result = $stmt->get_result();
+    if (!$result) {
+        return $contentTag;
+    }
 
-//     $head = ($dom->getElementsByTagName("head"))->item(0);
-//     $cssLink = $dom->createElement("link");
-//     $cssLink->setAttribute("rel", "stylesheet");
-//     $cssLink->setAttribute("href", "styles/query_page.css");
-//     $head->appendChild($cssLink);
+    $tableTag = sqlQueryTable($result, $tabelColumns, $subRoute, $subRouteKeyAttributes);
+    $contentTag->appendChild($tableTag);
 
-//     // Add toolbar
-//     $toolbarTag = $dom->getElementById("toolbar");
-//     domElementFillWithString($toolbarTag, domMakeToolbarLoggedIn());
-
-//     // Add content
-//     $contentTag = $dom->getElementById("content");
-//     domElementFillWithTemplate($contentTag, ELEM_DIR . "sql_result.htm");
-
-//     // Set title
-//     $titleTag = $dom->getElementById("contentTitle");
-//     $titleTag->textContent = $title;
-
-//     /* */
-//     $stmt = sqlPrepareExecute(
-//         $sql,
-//         __FUNCTION__
-//     );
-//     $result = $stmt->get_result();
-//     if (!$result) {
-//         return $contentTag;
-//     }
-
-//     $tableTag = sqlQueryTable($result, $tabelColumns, $subRoute, $subRouteKeyAttributes);
-//     $contentTag->appendChild($tableTag);
-
-//     return $contentTag;
-// }
+    // return $contentTag;
+}
 
 
-// function sqlQueryTable($sqlResult, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
-// {
-//     global $dom;
-//     $tableTag = $dom->getElementById("contentTable");
+function sqlQueryTable($sqlResult, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $tableTag = $dom->getElementById("contentTable");
 
-//     $tableHead = $dom->createElement("thead");
+    $tableHead = $dom->createElement("thead");
 
-//     $thRow = $dom->createElement("tr");
-//     foreach ($tabelColumns as $header) {
-//         $th = $dom->createElement("th");
-//         $th->textContent = $header;
-//         $thRow->appendChild($th);
-//     }
-//     $tableHead->appendChild($thRow);
+    $thRow = $dom->createElement("tr");
+    foreach ($tabelColumns as $header) {
+        $th = $dom->createElement("th");
+        $th->textContent = $header;
+        $thRow->appendChild($th);
+    }
+    $tableHead->appendChild($thRow);
 
-//     $tableTag->appendChild($tableHead);
+    $tableTag->appendChild($tableHead);
 
-//     $tableBody = $dom->createElement("tbody");
+    $tableBody = $dom->createElement("tbody");
 
-//     $isOddRow = true;
-//     if ($sqlResult->num_rows == 0) {
-//         for ($i = 0; $i < 1; $i++) {
-//             $tr = $dom->createElement("tr");
-//             $tr->setAttribute(
-//                 "class",
-//                 "none_row"
-//             );
-//             foreach ($tabelColumns as $_) {
-//                 $td = $dom->createElement("td");
-//                 domElementFillWithString($td, 'none');
-//                 $tr->appendChild($td);
-//             }
-//             $tableBody->appendChild($tr);
-//         }
-//     }
-//     while ($row = $sqlResult->fetch_assoc()) {
-//         $trRoute = ($subRoute == "") ? "" : domFindRoute($subRoute);
-//         $trRoute .= "?t=";
-//         foreach($subRouteKeyAttributes as $key){
-//             $trRoute .= "?t=" . $row[$key];
-//         }
+    $isOddRow = true;
+    if ($sqlResult->num_rows == 0) {
+        for ($i = 0; $i < 1; $i++) {
+            $tr = $dom->createElement("tr");
+            $tr->setAttribute(
+                "class",
+                "none_row"
+            );
+            foreach ($tabelColumns as $_) {
+                $td = $dom->createElement("td");
+                $td->textContent = "none";
+                $tr->appendChild($td);
+            }
+            $tableBody->appendChild($tr);
+        }
+    }
+    while ($row = $sqlResult->fetch_assoc()) {
+        $trRoute = ($subRoute == "") ? "" : findPage($subRoute);
+        $trRoute .= "?t=";
+        foreach($subRouteKeyAttributes as $key){
+            $trRoute .= "?t=" . $row[$key];
+        }
 
-//         $tr = $dom->createElement("tr");
-//         $tr->setAttribute(
-//             "class",
-//             $isOddRow ? "odd_row" : "even_row"
-//         );
+        $tr = $dom->createElement("tr");
+        $tr->setAttribute(
+            "class",
+            $isOddRow ? "odd_row" : "even_row"
+        );
 
-//         $tr->setAttribute("onclick", "window.location='" . $trRoute . "';");
+        $tr->setAttribute("onclick", "window.location='" . $trRoute . "';");
 
-//         foreach ($row as $attr) {
-//             $td = $dom->createElement("td");
-//             $td->textContent = $attr;
-//             $tr->appendChild($td);
-//         }
+        foreach ($row as $attr) {
+            $td = $dom->createElement("td");
+            $td->textContent = $attr;
+            $tr->appendChild($td);
+        }
 
-//         // $aTag->appendChild($tr);
+        // $aTag->appendChild($tr);
 
-//         $tableBody->appendChild($tr);
-//         $isOddRow = !$isOddRow;
-//     }
-//     $tableTag->appendChild($tableBody);
-//     return $tableTag;
-// }
+        $tableBody->appendChild($tr);
+        $isOddRow = !$isOddRow;
+    }
+    $tableTag->appendChild($tableBody);
+    return $tableTag;
+}
 
 
 // User

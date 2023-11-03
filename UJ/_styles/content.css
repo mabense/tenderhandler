@@ -1,0 +1,29 @@
+
+body {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bolder;
+    font-variant: small-caps;
+    letter-spacing: .2em;
+    text-rendering: optimizeLegibility;
+}
+
+form {
+    width: 100%;
+    align-items: center;
+}
+
+label {
+    width: 100%;
+    text-align: left;
+}
+
+label select, 
+label input {
+    width: 100%;
+    height: 2em;
+}
+
+input[type=submit] {
+    width: 60%;
+    height: 3em;
+}
