@@ -60,6 +60,19 @@ function setPage($page)
 	$_SESSION["page"] = $page;
 }
 
+function getTenderCode()
+{
+	if(!isset($_SESSION["tender"])) {
+		return "";
+	}
+	return $_SESSION["tender"];
+}
+
+function setTenderCode($tender)
+{
+	$_SESSION["tender"] = $tender;
+}
+
 function isThereFeedback()
 {
 	return (is_array($_SESSION["log"]) && sizeof($_SESSION["log"]) > 0);

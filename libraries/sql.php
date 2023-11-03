@@ -111,8 +111,9 @@ function sqlQueryTable($sqlResult, $tabelColumns = [], $subRoute = "", $subRoute
     }
     while ($row = $sqlResult->fetch_assoc()) {
         $trRoute = ($subRoute == "") ? "" : domFindRoute($subRoute);
+        $trRoute .= "?t=";
         foreach($subRouteKeyAttributes as $key){
-            $trRoute .= "?r=" . $row[$key];
+            $trRoute .= "?t=" . $row[$key];
         }
 
         $tr = $dom->createElement("tr");
