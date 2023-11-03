@@ -1,5 +1,8 @@
 <?php
 define("ROOT", "." . DIRECTORY_SEPARATOR);
+define("PAGE", "");
+
 require_once(ROOT . "const.php");
 
-require_once(LIB_DIR . "foo.php");
+header("Location: " . ROOT . DEFAULT_PAGE);
+exit;
