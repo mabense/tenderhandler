@@ -9,9 +9,9 @@ function sqlNewTopic($id, $title, $purpose)
     $fields = "(`id`, `title`, `purpose`)";
     $sql = "INSERT INTO TOPIC $fields VALUES (?, ?, ?)";
     $success = sqlPrepareBindExecute(
-        $sql, 
-        "sss", 
-        [$id, $title, $purpose], 
+        $sql,
+        "sss",
+        [$id, $title, $purpose],
         __FUNCTION__
     );
     return $success;
@@ -23,9 +23,9 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
     $fields = "(`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `topic_id`, `manager`)";
     $sql = "INSERT INTO TENDER $fields VALUES (?, ?, ?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(
-        $sql, 
-        "sssiiss", 
-        [$code, $begin, $end, $asked, $granted, $topic, $manager], 
+        $sql,
+        "sssiiss",
+        [$code, $begin, $end, $asked, $granted, $topic, $manager],
         __FUNCTION__
     );
     return $success;
@@ -35,7 +35,7 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 // Query page
 
 
-function sqlQueryPage($title, $sql, $tabelColumns = [])
+function sqlQueryPage($title, $sql, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
 {
     global $dom;
 
@@ -67,14 +67,14 @@ function sqlQueryPage($title, $sql, $tabelColumns = [])
         return $contentTag;
     }
 
-    $tableTag = sqlQueryTable($result, $tabelColumns);
+    $tableTag = sqlQueryTable($result, $tabelColumns, $subRoute, $subRouteKeyAttributes);
     $contentTag->appendChild($tableTag);
 
     return $contentTag;
 }
 
 
-function sqlQueryTable($sqlResult, $tabelColumns)
+function sqlQueryTable($sqlResult, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
 {
     global $dom;
     $tableTag = $dom->getElementById("contentTable");
@@ -110,16 +110,27 @@ function sqlQueryTable($sqlResult, $tabelColumns)
         }
     }
     while ($row = $sqlResult->fetch_assoc()) {
+        $trRoute = ($subRoute == "") ? "" : domFindRoute($subRoute);
+        foreach($subRouteKeyAttributes as $key){
+            $trRoute .= "?r=" . $row[$key];
+        }
+
         $tr = $dom->createElement("tr");
         $tr->setAttribute(
             "class",
             $isOddRow ? "odd_row" : "even_row"
         );
+
+        $tr->setAttribute("onclick", "window.location='" . $trRoute . "';");
+
         foreach ($row as $attr) {
             $td = $dom->createElement("td");
             $td->textContent = $attr;
             $tr->appendChild($td);
         }
+
+        // $aTag->appendChild($tr);
+
         $tableBody->appendChild($tr);
         $isOddRow = !$isOddRow;
     }

@@ -17,6 +17,10 @@ if ($dom) {
             "granted", 
             "topic", 
             "manager"
+        ], 
+        "tender", 
+        [
+            "code"
         ]
     );
     sqlDisconnect();
