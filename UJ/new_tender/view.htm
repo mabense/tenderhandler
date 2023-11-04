@@ -1,0 +1,53 @@
+<h1 id="contentTitle"></h1>
+<form id="mainForm" method="POST" action="./?action=submit" accept-charset="utf-8">
+    <label for="code">
+        <span>Unique identifying code:</span><br />
+        <span class="row">
+            <input id="code" name="code" type="text" size="10" maxlength="10" />
+        </span>
+    </label>
+    <br />
+    <label for="begin">
+        <span>Tender begins:</span><br />
+        <span class="row">
+            <input id="begin" name="begin" type="date" />
+        </span>
+    </label>
+    <br />
+    <label for="end">
+        <span>Tender ends:</span><br />
+        <span class="row">
+            <input id="end" name="end" type="date" />
+        </span>
+    </label>
+    <br />
+    <label for="asked">
+        <span>Proposed amount:</span><br />
+        <span class="row">
+            <input id="asked" name="asked" type="number" step="100000" />
+        </span>
+    </label>
+    <br />
+    <label for="granted">
+        <span>Granted amount:</span><br />
+        <span class="row">
+            <input id="granted" name="granted" type="number" step="100000" />
+        </span>
+    </label>
+    <label for="topic">
+        <span>Topic:</span><br />
+        <span class="row">
+            <select id="topic" name="topic"></select>
+        </span>
+    </label>
+    <label for="manager">
+        <span>Manager:</span><br />
+        <span class="row">
+            <select id="manager" name="manager"></select>
+        </span>
+    </label>
+    <br />
+    <div class="row">
+        <input id="ok" name="ok" type="submit" value="Confirm" />
+    </div>
+</form>

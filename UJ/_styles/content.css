@@ -27,3 +27,15 @@ input[type=submit] {
     width: 60%;
     height: 3em;
 }
+
+label textarea {
+    width: 100%;
+    height: 12em;
+    box-sizing: border-box;
+    padding: .75em;
+    resize: vertical;
+    text-align: justify;
+    text-align-last: left;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
