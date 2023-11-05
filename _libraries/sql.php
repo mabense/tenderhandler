@@ -185,7 +185,7 @@ function sqlLogout($email)
         [$email],
         __FUNCTION__
     );
-    if (!resetUser()) {
+    if (!resetUser() || !resetTableKeys() || !resetTableAllKeys()) {
         pushFeedbackToLog("Session error. Please, delete cookies and refresh page.", true);
         $success = false;
     }
