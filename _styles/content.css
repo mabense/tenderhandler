@@ -39,3 +39,7 @@ label textarea {
     overflow-x: hidden;
     overflow-y: auto;
 }
+
+/* #detailedTable tr.dataRow {
+    border: 2px solid black;
+} */

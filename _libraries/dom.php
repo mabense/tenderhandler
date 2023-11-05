@@ -41,7 +41,7 @@ function domHandleTableRow()
     if (isset($rowIndex)) {
         $allKeys = getTableAllKeys();
         $keys = $allKeys[$rowIndex];
-        if(is_array($keys)) {
+        if (is_array($keys)) {
             setTableKeys($keys);
         }
         resetTableAllKeys();
@@ -108,6 +108,32 @@ function domMakeToolbarLoggedIn()
             "tender_list" // list tenders >> list milestones >> view milestone >> view document >> upload/download
         ]);
     }
+}
+
+
+function domContentTableFrom($assocArray)
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $contentTag = $dom->getElementById("content");
+    $table = $dom->createElement("table");
+    // $table->setAttribute("id", "detailedTable");
+
+    $isOddRow = true;
+    foreach ($assocArray as $key => $val) {
+        $tr = $dom->createElement("tr");
+        $tr->setAttribute("class", $isOddRow ? "odd_row" : "even_row");
+        $tdKey = $dom->createElement("td");
+        $tdKey->textContent = toDisplayText($key);
+        $tdVal = $dom->createElement("td");
+        $tdVal->textContent = toDisplayText($val);
+        $tr->appendChild($tdKey);
+        $tr->appendChild($tdVal);
+        $table->appendChild($tr);
+        $isOddRow = !$isOddRow;
+    }
+
+    $contentTag->appendChild($table);
 }
 
 
