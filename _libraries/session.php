@@ -9,6 +9,11 @@ function haveSession()
 }
 
 
+// function auth() {
+
+// }
+
+
 function getUserEmail()
 {
     return $_SESSION["uEmail"];

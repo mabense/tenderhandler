@@ -16,8 +16,6 @@ domHandleAction();
 $dom = new DOMDocument();
 if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
-    domSetTitle(toDisplayText(PAGE));
-
     domAddStyle("../_styles/query_page.css");
     // domAddStyle(STYLE_DIR . "query_page.css");
 
@@ -37,6 +35,8 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     
     $buttons = $dom->getElementById("contentButtons");
     $buttons->parentNode->removeChild($buttons);
+
+    domSetTitle(toDisplayText(PAGE));
 
     domPopFeedback();
 }

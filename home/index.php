@@ -14,11 +14,11 @@ domHandleAction();
 $dom = new DOMDocument();
 if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
-    domSetTitle(toDisplayText(PAGE));
-
     domMakeToolbarLoggedIn();
 
     domAppendTemplateTo("content", "./view.htm");
+
+    domSetTitle(toDisplayText(PAGE));
     
     domPopFeedback();
 }

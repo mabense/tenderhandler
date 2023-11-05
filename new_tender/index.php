@@ -15,7 +15,6 @@ domHandleAction();
 
 $dom = new DOMDocument();
 if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
-    domSetTitle(toDisplayText(PAGE));
 
     domMakeToolbarLoggedIn();
 
@@ -67,6 +66,8 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     sqlDisconnect();
     
+    domSetTitle(toDisplayText(PAGE));
+
     domPopFeedback();
 }
 

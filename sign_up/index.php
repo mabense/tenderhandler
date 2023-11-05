@@ -14,14 +14,14 @@ domHandleAction();
 $dom = new DOMDocument();
 if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
-    domSetTitle(toDisplayText(PAGE));
-
     domMakeToolbar([
         "log_in",
         "jobs"
     ]);
 
     domAppendTemplateTo("content", "./view.htm");
+
+    domSetTitle(toDisplayText(PAGE));
     
     domPopFeedback();
 }

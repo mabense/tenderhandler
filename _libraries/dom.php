@@ -55,10 +55,10 @@ function domSetTitle($pageTitle)
 {
     $dom = new DOMDocument();
     global $dom;
-    $titleTag = ($dom->getElementsByTagName("title"))->item(0);
-    $titleTag->textContent .= " - " . $pageTitle;
     $contentTitle = $dom->getElementById("contentTitle");
     $contentTitle->textContent = $pageTitle;
+    $titleTag = ($dom->getElementsByTagName("title"))->item(0);
+    $titleTag->textContent .= " - " . $pageTitle;
 }
 
 
