@@ -41,6 +41,50 @@ function resetUser()
 }
 
 
+function getTableAllKeys()
+{
+    if (!isset($_SESSION["tableAllKeys"])) {
+        return false;
+    }
+    return $_SESSION["tableAllKeys"];
+}
+
+
+function setTableAllKeys($keys)
+{
+    $_SESSION["tableAllKeys"] = $keys;
+}
+
+function resetTableAllKeys()
+{
+    setTableAllKeys(false);
+    unset($_SESSION["tableAllKeys"]);
+    return !isset($_SESSION["tableAllKeys"]);
+}
+
+
+function getTableKeys()
+{
+    if (!isset($_SESSION["tableKeys"])) {
+        return false;
+    }
+    return $_SESSION["tableKeys"];
+}
+
+
+function setTableKeys($keys)
+{
+    $_SESSION["tableKeys"] = $keys;
+}
+
+function resetTableKeys()
+{
+    setTableKeys(false);
+    unset($_SESSION["tableKeys"]);
+    return !isset($_SESSION["tableKeys"]);
+}
+
+
 // function getPage()
 // {
 //     if (!isset($_SESSION["page"])) {

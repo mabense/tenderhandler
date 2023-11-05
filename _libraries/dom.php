@@ -34,6 +34,23 @@ function domHandleAction()
 }
 
 
+function domHandleTableRow()
+{
+    haveSession();
+    $rowIndex = $_GET["row"];
+    if (isset($rowIndex)) {
+        $allKeys = getTableAllKeys();
+        $keys = $allKeys[$rowIndex];
+        if(is_array($keys)) {
+            setTableKeys($keys);
+        }
+        resetTableAllKeys();
+        header("Location: " . ROOT . PAGE);
+        exit;
+    }
+}
+
+
 function domSetTitle($pageTitle)
 {
     $dom = new DOMDocument();

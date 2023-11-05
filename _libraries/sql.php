@@ -4,14 +4,14 @@
 // Tender
 
 
-function sqlNewTopic($id, $title, $purpose)
+function sqlNewTopic($title, $purpose)
 {
-    $fields = "(`id`, `title`, `purpose`)";
-    $sql = "INSERT INTO TOPIC $fields VALUES (?, ?, ?)";
+    $fields = "(`title`, `purpose`)";
+    $sql = "INSERT INTO TOPIC $fields VALUES (?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
-        "sss",
-        [$id, $title, $purpose],
+        "ss",
+        [$title, $purpose],
         __FUNCTION__
     );
     return $success;
@@ -24,7 +24,7 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
     $sql = "INSERT INTO TENDER $fields VALUES (?, ?, ?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
-        "sssiiss",
+        "sssiiis",
         [$code, $begin, $end, $asked, $granted, $topic, $manager],
         __FUNCTION__
     );
@@ -35,7 +35,7 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 // Query page
 
 
-function sqlQueryContent($sql, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
+function sqlQueryContent($sql, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [])
 {
     $dom = new DOMDocument();
     global $dom;
@@ -50,19 +50,54 @@ function sqlQueryContent($sql, $tabelColumns = [], $subRoute = "", $subRouteKeyA
         return $contentTag;
     }
 
-    $tableTag = sqlQueryTable($result, $tabelColumns, $subRoute, $subRouteKeyAttributes);
+    $tableTag = sqlQueryTable($result, $tabelColumns, $onClickRoute, $keyAttributes);
     $contentTag->appendChild($tableTag);
 
     // return $contentTag;
 }
 
 
-function sqlQueryTable($sqlResult, $tabelColumns = [], $subRoute = "", $subRouteKeyAttributes = [])
+function sqlQueryTable($sqlResult, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [])
 {
     $dom = new DOMDocument();
     global $dom;
     $tableTag = $dom->getElementById("contentTable");
 
+    $tableHead = sqlQueryTableHead($tabelColumns);
+    $tableTag->appendChild($tableHead);
+
+    $tableBody = $dom->createElement("tbody");
+
+    if ($sqlResult->num_rows == 0) {
+        $tr = sqlQueryTableEmptyRow(count($tabelColumns));
+        $tableBody->appendChild($tr);
+    } else {
+        $tableKeys = [];
+        $i = 0;
+        while ($row = $sqlResult->fetch_assoc()) {
+            $tr = sqlQueryTableRow($row, $onClickRoute, $i);
+
+            $rowKey = [];
+            foreach ($keyAttributes as $key) {
+                $rowKey[$key] = $row[$key];
+                // array_push($rowKey, $row[$key]);
+                // $trRoute .= $row[$key];
+            }
+            $tableKeys[$i] = $rowKey;
+
+            $tableBody->appendChild($tr);
+            $i++;
+        }
+        setTableAllKeys($tableKeys);
+    }
+    $tableTag->appendChild($tableBody);
+    return $tableTag;
+}
+
+function sqlQueryTableHead($tabelColumns)
+{
+    $dom = new DOMDocument();
+    global $dom;
     $tableHead = $dom->createElement("thead");
 
     $thRow = $dom->createElement("tr");
@@ -73,54 +108,49 @@ function sqlQueryTable($sqlResult, $tabelColumns = [], $subRoute = "", $subRoute
     }
     $tableHead->appendChild($thRow);
 
-    $tableTag->appendChild($tableHead);
+    return $tableHead;
+}
 
-    $tableBody = $dom->createElement("tbody");
-
-    $isOddRow = true;
-    if ($sqlResult->num_rows == 0) {
-        for ($i = 0; $i < 1; $i++) {
-            $tr = $dom->createElement("tr");
-            $tr->setAttribute(
-                "class",
-                "none_row"
-            );
-            foreach ($tabelColumns as $_) {
-                $td = $dom->createElement("td");
-                $td->textContent = "none";
-                $tr->appendChild($td);
-            }
-            $tableBody->appendChild($tr);
-        }
+function sqlQueryTableEmptyRow($columnCount)
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $tr = $dom->createElement("tr");
+    $tr->setAttribute(
+        "class",
+        "none_row"
+    );
+    for ($i = 0; $i < $columnCount; $i++) {
+        $td = $dom->createElement("td");
+        $nbsp = $dom->createElement("pre");
+        $td->appendChild($nbsp);
+        $tr->appendChild($td);
     }
-    while ($row = $sqlResult->fetch_assoc()) {
-        $trRoute = ($subRoute == "") ? "" : findPage($subRoute);
-        $trRoute .= "?t=";
-        foreach($subRouteKeyAttributes as $key){
-            $trRoute .= "?t=" . $row[$key];
-        }
+    return $tr;
+}
 
-        $tr = $dom->createElement("tr");
-        $tr->setAttribute(
-            "class",
-            $isOddRow ? "odd_row" : "even_row"
-        );
+function sqlQueryTableRow($sqlResultRow, $onClickRoute, $rowIndex)
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $trRoute = ($onClickRoute == "") 
+    ? "./" 
+    : "../" . findPage($onClickRoute) . "/?row=" . $rowIndex;
 
-        $tr->setAttribute("onclick", "window.location='" . $trRoute . "';");
+    $tr = $dom->createElement("tr");
+    $tr->setAttribute(
+        "class",
+        ($rowIndex % 2 == 0) ? "even_row" : "odd_row"
+    );
 
-        foreach ($row as $attr) {
-            $td = $dom->createElement("td");
-            $td->textContent = $attr;
-            $tr->appendChild($td);
-        }
+    $tr->setAttribute("onclick", "window.location='" . $trRoute . "';");
 
-        // $aTag->appendChild($tr);
-
-        $tableBody->appendChild($tr);
-        $isOddRow = !$isOddRow;
+    foreach ($sqlResultRow as $attr) {
+        $td = $dom->createElement("td");
+        $td->textContent = $attr;
+        $tr->appendChild($td);
     }
-    $tableTag->appendChild($tableBody);
-    return $tableTag;
+    return $tr;
 }
 
 
