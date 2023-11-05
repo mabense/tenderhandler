@@ -19,7 +19,7 @@ domHandleMissingPage();
 domHandleAction();
 
 domHandleTableRow();
-$keys = getTableKeys();
+$tenderCode = getTender();
 
 $page = PAGE;
 $placeholder = "...";
@@ -44,10 +44,9 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    if ($keys) {
+    if ($tenderCode) {
         $conn = sqlConnect();
 
-        $tenderCode = $keys["code"];
         $tenderData["code"] = $tenderCode;
         $page = $tenderCode;
         $tenderStmt = sqlPrepareBindExecute(

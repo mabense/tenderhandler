@@ -32,7 +32,60 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 }
 
 
+function sqlNewMilestone($tender, $name, $date, $description)
+{
+    $number = 1;
+    $fields = "(`tender`, `number`, `name`, `date`, `description`)";
+    $sql = "INSERT INTO MILESTONE $fields VALUES (?, ?, ?, ?, ?)";
+    $success = sqlPrepareBindExecute(
+        $sql,
+        "sisss",
+        [$tender, $number, $name, $date, $description],
+        __FUNCTION__
+    );
+    return $success;
+}
+
+
+function sqlNewDocument($_)
+{
+    $fields = "(`title`, `purpose`)";
+    $sql = "INSERT INTO DOCUMENT $fields VALUES (?, ?)";
+    $success = sqlPrepareBindExecute(
+        $sql,
+        "s",
+        [$_],
+        __FUNCTION__
+    );
+    return $success;
+}
+
+
 // Query page
+
+
+function sqlQueryContentParam($sqlQuery, $sqlTypes, $sqlParams, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [])
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $contentTag = $dom->getElementById("content");
+    /* */
+    $stmt = sqlPrepareBindExecute(
+        $sqlQuery, 
+        $sqlTypes, 
+        $sqlParams, 
+        __FUNCTION__
+    );
+    $result = $stmt->get_result();
+    if (!$result) {
+        return $contentTag;
+    }
+
+    $tableTag = sqlQueryTable($result, $tabelColumns, $onClickRoute, $keyAttributes);
+    $contentTag->appendChild($tableTag);
+
+    // return $contentTag;
+}
 
 
 function sqlQueryContent($sql, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [])
@@ -185,7 +238,7 @@ function sqlLogout($email)
         [$email],
         __FUNCTION__
     );
-    if (!resetUser() || !resetTableKeys() || !resetTableAllKeys()) {
+    if (!resetUser()) {
         pushFeedbackToLog("Session error. Please, delete cookies and refresh page.", true);
         $success = false;
     }

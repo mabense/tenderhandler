@@ -1,9 +1,11 @@
 <?php
 define("ROOT", ".." . DIRECTORY_SEPARATOR);
-define("PAGE", "new_topic");
+define("PAGE", "new_milestone");
 
 require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");
+
+require_once(LIB_DIR . "sql.php");
 
 haveSession();
 
@@ -23,8 +25,12 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", "./view.htm");
 
-    domSetTitle(toDisplayText(PAGE));
+    // $conn = sqlConnect();
+
+    // sqlDisconnect();
     
+    domSetTitle(toDisplayText(PAGE));
+
     domPopFeedback();
 }
 

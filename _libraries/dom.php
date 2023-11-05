@@ -41,9 +41,20 @@ function domHandleTableRow()
     if (isset($rowIndex)) {
         $allKeys = getTableAllKeys();
         $keys = $allKeys[$rowIndex];
-        if (is_array($keys)) {
-            setTableKeys($keys);
+        switch (PAGE) {
+            case 'tender':
+                setTender($keys["code"]);
+                break;
+            case 'milestone':
+                setMilestone($keys["number"]);
+                break;
+            case 'document':
+                setDocument($keys["requirement"]);
+                break;
+            default:
+                break;
         }
+
         resetTableAllKeys();
         header("Location: " . ROOT . PAGE);
         exit;

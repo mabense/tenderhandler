@@ -54,6 +54,10 @@ function resetUser()
     unset($_SESSION["uEmail"]);
     unset($_SESSION["uName"]);
     unset($_SESSION["uAdmin"]);
+    resetTender();
+    resetMilestone();
+    resetDocument();
+    resetTableAllKeys();
     return !isset($_SESSION["uEmail"]);
 }
 
@@ -80,25 +84,69 @@ function resetTableAllKeys()
 }
 
 
-function getTableKeys()
+function getTender()
 {
-    if (!isset($_SESSION["tableKeys"])) {
+    if (!isset($_SESSION["tenderCode"])) {
         return false;
     }
-    return $_SESSION["tableKeys"];
+    return $_SESSION["tenderCode"];
 }
 
 
-function setTableKeys($keys)
+function setTender($code)
 {
-    $_SESSION["tableKeys"] = $keys;
+    $_SESSION["tenderCode"] = $code;
 }
 
-function resetTableKeys()
+function resetTender()
 {
-    setTableKeys(false);
-    unset($_SESSION["tableKeys"]);
-    return !isset($_SESSION["tableKeys"]);
+    setTender(false);
+    unset($_SESSION["tenderCode"]);
+    return !isset($_SESSION["tenderCode"]);
+}
+
+
+function getMilestone()
+{
+    if (!isset($_SESSION["milestone"])) {
+        return false;
+    }
+    return $_SESSION["milestone"];
+}
+
+
+function setMilestone($number)
+{
+    $_SESSION["milestone"] = $number;
+}
+
+function resetMilestone()
+{
+    setMilestone(false);
+    unset($_SESSION["milestone"]);
+    return !isset($_SESSION["milestone"]);
+}
+
+
+function getDocument()
+{
+    if (!isset($_SESSION["document"])) {
+        return false;
+    }
+    return $_SESSION["document"];
+}
+
+
+function setDocument($requirement)
+{
+    $_SESSION["document"] = $requirement;
+}
+
+function resetDocument()
+{
+    setDocument(false);
+    unset($_SESSION["document"]);
+    return !isset($_SESSION["document"]);
 }
 
 
