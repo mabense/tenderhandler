@@ -9,9 +9,21 @@ function haveSession()
 }
 
 
-// function auth() {
-
-// }
+function auth($acceptGuest, $acceptManager, $acceptAdmin) {
+    $isGuest = !getUserEmail();
+    $isAdmin = isUserAdmin();
+    $isManager = !$isGuest && !$isAdmin;
+    if(!$acceptGuest && $isGuest) {
+        return false;
+    }
+    if(!$acceptManager && $isManager) {
+        return false;
+    }
+    if(!$acceptAdmin && $isAdmin) {
+        return false;
+    }
+    return true;
+}
 
 
 function getUserEmail()

@@ -7,6 +7,11 @@ require_once(ROOT . "requirements.php");
 
 haveSession();
 
+if(!auth(false, false, true)){
+    header("Location: " . ROOT . "home");
+    exit;
+}
+
 domHandleMissingPage();
 
 domHandleAction();

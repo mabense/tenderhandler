@@ -8,6 +8,12 @@ require_once(ROOT . "requirements.php");
 require_once(LIB_DIR . "sql.php");
 
 haveSession();
+
+if(!auth(false, true, true)){
+    header("Location: " . ROOT . "log_in");
+    exit;
+}
+
 $user = getUserEmail();
 $page = "home";
 
