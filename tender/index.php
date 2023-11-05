@@ -42,7 +42,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domMakeToolbarLoggedIn();
 
-    domAppendTemplateTo("content", "./view.htm");
+    domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
     if ($keys) {
         $conn = sqlConnect();
@@ -99,6 +99,24 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         domContentTableFrom($tenderData);
 
         sqlDisconnect();
+
+        if(isUserAdmin()) {
+            $buttons = $dom->getElementById("contentButtons");
+    
+            $setMan = $dom->createElement("a", "Set manager");
+            $setMan->setAttribute("class", "a_button");
+            $setMan->setAttribute("href", "../" . findPage("set_manager"));
+            $buttons->appendChild($setMan);
+            
+            $listMS = $dom->createElement("a", "List milestones");
+            $listMS->setAttribute("class", "a_button");
+            $listMS->setAttribute("href", "../" . findPage("milestone_list"));
+            $buttons->appendChild($listMS);
+        }
+        else {
+            $buttons = $dom->getElementById("contentButtons");
+            $buttons->parentNode->removeChild($buttons);
+        }
     } else {
         pushFeedbackToLog("Tender isn't selected.", true);
     }

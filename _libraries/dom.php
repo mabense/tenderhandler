@@ -115,9 +115,9 @@ function domContentTableFrom($assocArray)
 {
     $dom = new DOMDocument();
     global $dom;
-    $contentTag = $dom->getElementById("content");
-    $table = $dom->createElement("table");
-    // $table->setAttribute("id", "detailedTable");
+    $table = $dom->getElementById("contentTable");
+    // $table = $dom->createElement("table");
+    $table->setAttribute("id", "detailedTable");
 
     $isOddRow = true;
     foreach ($assocArray as $key => $val) {
@@ -133,7 +133,7 @@ function domContentTableFrom($assocArray)
         $isOddRow = !$isOddRow;
     }
 
-    $contentTag->appendChild($table);
+    // $contentTag->appendChild($table);
 }
 
 
