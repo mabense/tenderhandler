@@ -20,4 +20,4 @@ define("BASE_TEMPLATE", TEMPLATE_DIR . "base.htm");
 
 // Pages
 
-define("DEFAULT_PAGE", "log_in");
+define("DEFAULT_PAGE", "home");
