@@ -35,6 +35,16 @@ function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 function sqlNewMilestone($tender, $name, $date, $description)
 {
     $number = 1;
+    $numStmt = sqlPrepareBindExecute(
+        "SELECT MAX(`number`) AS max FROM MILESTONE WHERE `tender`=?", 
+        "s", 
+        [$tender], 
+        __FUNCTION__
+    );
+    $numResult = $numStmt->get_result();
+    if($numRow = $numResult->fetch_assoc()) {
+        $number = $numRow["max"] + 1;
+    }
     $fields = "(`tender`, `number`, `name`, `date`, `description`)";
     $sql = "INSERT INTO MILESTONE $fields VALUES (?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(

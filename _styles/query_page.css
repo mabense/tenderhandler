@@ -118,6 +118,11 @@
 }
 
 #contentTable {
+    overflow: hidden;
+    contain: content;
+}
+
+#contentTable tbody {
     overflow: auto;
 }
 
@@ -132,6 +137,12 @@
     height: fit-content;
     max-height: 50vh;
 }
+
+/* #contentTable thead {
+    position: absolute;
+    top: 0;
+    right: 0;
+} */
 
 /* debug */
 
