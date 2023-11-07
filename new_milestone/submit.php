@@ -33,5 +33,6 @@ if ($result) {
     pushFeedbackToLog("Failed to add tender.", true);
 }
 $page = "milestone_list";
-header("Location: " . ROOT . $page);
-exit;
+redirectTo(ROOT . $page);
+// header("Location: " . ROOT . $page);
+// exit;

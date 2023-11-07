@@ -26,5 +26,6 @@ if ($result != false) {
 } elseif(!isThereFeedback()) {
     pushFeedbackToLog("Failed to sign up.", true);
 }
-header("Location: " . ROOT . $page);
-exit;
+redirectTo(ROOT . $page);
+// header("Location: " . ROOT . $page);
+// exit;

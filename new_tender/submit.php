@@ -39,5 +39,6 @@ if ($result) {
     pushFeedbackToLog("Failed to add tender.", true);
 }
 $page = "tender_list";
-header("Location: " . ROOT . $page);
-exit;
+redirectTo(ROOT . $page);
+// header("Location: " . ROOT . $page);
+// exit;

@@ -15,3 +15,9 @@ function findPage($nextPage) {
 	}
 	return PAGE . "?missing=" . $nextPage;
 }
+
+
+function redirectTo($pageRoute) {
+	header("Location: " . $pageRoute);
+	exit;
+}

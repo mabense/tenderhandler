@@ -3,11 +3,12 @@ define("ROOT", "." . DIRECTORY_SEPARATOR);
 define("PAGE", "");
 
 require_once(ROOT . "const.php");
-// require_once(ROOT . "requirements.php");
+require_once(ROOT . "requirements.php");
 
 // haveSession();
 
-// domHandleMissingPage();
+domHandleMissingPage();
 
-header("Location: " . ROOT . DEFAULT_PAGE);
-exit;
+redirectTo(ROOT . DEFAULT_PAGE);
+// header("Location: " . ROOT . DEFAULT_PAGE);
+// exit;

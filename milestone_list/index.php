@@ -12,8 +12,9 @@ haveSession();
 $tenderCode = getTender();
 
 if(!auth(false, true, true)){
-    header("Location: " . ROOT . "log_in");
-    exit;
+    redirectTo(ROOT . "log_in");
+    // header("Location: " . ROOT . "log_in");
+    // exit;
 }
 
 domHandleMissingPage();

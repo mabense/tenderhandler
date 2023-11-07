@@ -8,8 +8,9 @@ require_once(ROOT . "requirements.php");
 haveSession();
 
 if(!auth(true, false, false)){
-    header("Location: " . ROOT . "home");
-    exit;
+    redirectTo(ROOT . "home");
+    // header("Location: " . ROOT . "home");
+    // exit;
 }
 
 domHandleMissingPage();
