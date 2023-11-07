@@ -21,3 +21,21 @@ define("BASE_TEMPLATE", TEMPLATE_DIR . "base.htm");
 // Pages
 
 define("DEFAULT_PAGE", "home");
+define("ALT_ROUTES", [
+    
+    "new_document" => "document_new", 
+
+    "new_milestone" => "milestone_new", 
+
+    "new_tender" => "tender_new", 
+    "set_manager" => "tender_edit", 
+
+    "manager_list" => "user_manager_list", 
+    "schedule" => "user_schedule", 
+    "home" => "user_home", 
+    "log_out" => "user_log_out", 
+
+    "sign_up" => "guest_sign_up", 
+    "jobs" => "guest_jobs", 
+    "log_in" => "guest_log_in"
+]);
