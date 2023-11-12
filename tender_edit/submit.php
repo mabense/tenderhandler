@@ -32,6 +32,4 @@ if ($result != false) {
     pushFeedbackToLog("Failed to update tender.", true);
 }
 $page = "tender";
-redirectTo(ROOT . $page);
-// header("Location: " . ROOT . $page);
-// exit;
+redirectTo(ROOT, $page);

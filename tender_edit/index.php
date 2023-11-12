@@ -1,6 +1,6 @@
 <?php
 define("ROOT", ".." . DIRECTORY_SEPARATOR);
-define("PAGE", "set_manager");
+define("PAGE", "tender_edit");
 
 require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");
@@ -10,9 +10,7 @@ require_once(LIB_DIR . "sql.php");
 haveSession();
 
 if(!auth(false, false, true)){
-    redirectTo(ROOT . "home");
-    // header("Location: " . ROOT . "home");
-    // exit;
+    redirectTo(ROOT, "home");
 }
 
 domHandleMissingPage();

@@ -9,9 +9,7 @@ haveSession();
 
 if(!auth(true, false, false)){
 
-    redirectTo(ROOT . "home");
-    // header("Location: " . ROOT . "home");
-    // exit;
+    redirectTo(ROOT, "home");
 }
 
 domHandleMissingPage();

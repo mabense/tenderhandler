@@ -1,6 +1,6 @@
 <?php
 define("ROOT", ".." . DIRECTORY_SEPARATOR);
-define("PAGE", "new_topic");
+define("PAGE", "topic_new");
 
 require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");
@@ -8,9 +8,7 @@ require_once(ROOT . "requirements.php");
 haveSession();
 
 if(!auth(false, false, true)){
-    redirectTo(ROOT . "home");
-    // header("Location: " . ROOT . "home");
-    // exit;
+    redirectTo(ROOT, "home");
 }
 
 domHandleMissingPage();

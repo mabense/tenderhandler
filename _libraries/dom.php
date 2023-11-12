@@ -10,9 +10,7 @@ function domHandleMissingPage()
     if (isset($missingPage)) {
         pushFeedbackToLog("\"" . $missingPage . "\" not found.", true);
 
-        redirectTo(ROOT . PAGE);
-        // header("Location: " . ROOT . PAGE);
-        // exit;
+        redirectTo(ROOT, PAGE);
     }
 }
 
@@ -26,15 +24,11 @@ function domHandleAction()
             require_once($actionPath);
             pushFeedbackToLog("\"" . $action . "\" failed.", true);
 
-            redirectTo(ROOT . PAGE);
-            // header("Location: " . ROOT . PAGE);
-            // exit;
+            redirectTo(ROOT, PAGE);
         } else {
             pushFeedbackToLog("\"" . $action . "\" not found.", true);
 
-            redirectTo(ROOT . PAGE);
-            // header("Location: " . ROOT . PAGE);
-            // exit;
+            redirectTo(ROOT, PAGE);
         }
     }
 }
@@ -63,9 +57,7 @@ function domHandleTableRow()
 
         resetTableAllKeys();
 
-        redirectTo(ROOT . PAGE);
-        // header("Location: " . ROOT . PAGE);
-        // exit;
+        redirectTo(ROOT, PAGE);
     }
 }
 

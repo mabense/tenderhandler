@@ -10,9 +10,7 @@ require_once(LIB_DIR . "sql.php");
 haveSession();
 
 if(!auth(false, true, true)){
-    redirectTo(ROOT . "log_in");
-    // header("Location: " . ROOT . "log_in");
-    // exit;
+    redirectTo(ROOT, "log_in");
 }
 
 domHandleMissingPage();
@@ -53,12 +51,12 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
         $addTender = $dom->createElement("a", "Add new tender");
         $addTender->setAttribute("class", "a_button");
-        $addTender->setAttribute("href", "../" . findPage("new_tender"));
+        $addTender->setAttribute("href", "../" . findPage("tender_new"));
         $buttons->appendChild($addTender);
         
         $addTopic = $dom->createElement("a", "Add new topic");
         $addTopic->setAttribute("class", "a_button");
-        $addTopic->setAttribute("href", "../" . findPage("new_topic"));
+        $addTopic->setAttribute("href", "../" . findPage("topic_new"));
         $buttons->appendChild($addTopic);
     }
     else {

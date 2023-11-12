@@ -9,6 +9,4 @@ require_once(ROOT . "requirements.php");
 
 domHandleMissingPage();
 
-redirectTo(ROOT . DEFAULT_PAGE);
-// header("Location: " . ROOT . DEFAULT_PAGE);
-// exit;
+redirectTo(ROOT,  DEFAULT_PAGE);

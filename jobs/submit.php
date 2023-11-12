@@ -26,6 +26,4 @@ if ($result != false) {
 } elseif(!isThereFeedback()) {
     pushFeedbackToLog("Application failed.", true);
 }
-redirectTo(ROOT. $page);
-// header("Location: " . ROOT . $page);
-// exit;
+redirectTo(ROOT,  $page);

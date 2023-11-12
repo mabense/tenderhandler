@@ -14,18 +14,11 @@ function findPage($nextPage) {
 	if (file_exists($route . "index.php")) {
 		return $nextPage;
 	}
-	else {
-		$alias = ALT_ROUTES[$nextPage];
-		$alt_route = ROOT . $alias . DIRECTORY_SEPARATOR;
-		if (file_exists($alt_route . "index.php")) {
-			return $alias;
-		}
-	}
 	return PAGE . "?missing=" . $nextPage;
 }
 
 
-function redirectTo($pageRoute) {
-	header("Location: " . findPage($pageRoute));
+function redirectTo($root, $pageRoute) {
+	header("Location: " . $root . findPage($pageRoute));
 	exit;
 }

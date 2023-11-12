@@ -10,9 +10,7 @@ require_once(LIB_DIR . "sql.php");
 haveSession();
 
 if(!auth(false, false, true)){
-    redirectTo(ROOT . "home");
-    // header("Location: " . ROOT . "home");
-    // exit;
+    redirectTo(ROOT, "home");
 }
 
 domHandleMissingPage();

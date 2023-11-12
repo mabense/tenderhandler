@@ -24,6 +24,4 @@ if ($user != false) {
 } elseif (!isThereFeedback()) {
     pushFeedbackToLog("Failed to log in.", true);
 }
-redirectTo(ROOT . $page);
-// header("Location: " . ROOT . $page);
-// exit;
+redirectTo(ROOT, $page);
