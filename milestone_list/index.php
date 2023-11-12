@@ -54,7 +54,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
         $addTender = $dom->createElement("a", "Add new milestone");
         $addTender->setAttribute("class", "a_button");
-        $addTender->setAttribute("href", "../" . findPage("milestone_new"));
+        $addTender->setAttribute("href", "../" . findPage("new_milestone"));
         $buttons->appendChild($addTender);
         
         $addTopic = $dom->createElement("a", "Back to tender");

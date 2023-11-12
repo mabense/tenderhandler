@@ -1,6 +1,6 @@
 <?php
 define("ROOT", ".." . DIRECTORY_SEPARATOR);
-define("PAGE", "milestone_new");
+define("PAGE", "new_milestone");
 
 require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");

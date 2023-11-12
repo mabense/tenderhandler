@@ -9,7 +9,7 @@ require_once(LIB_DIR . "sql.php");
 
 haveSession();
 
-if(!auth(false, true, true)){
+if (!auth(false, true, true)) {
     redirectTo(ROOT, "log_in");
 }
 
@@ -22,15 +22,16 @@ $tenderCode = getTender();
 
 $page = PAGE;
 $placeholder = "...";
-$tenderData = [
-    "code" => $placeholder, 
-    "begins" => $placeholder, 
-    "ends" => $placeholder, 
-    "sum_asked" => $placeholder, 
-    "sum_granted" => $placeholder, 
-    "manager_name" => $placeholder, 
-    "manager_email" => $placeholder, 
-    "topic_title" => $placeholder, 
+// $tender = [
+$milestoneData = [
+    "code" => $placeholder,
+    "begins" => $placeholder,
+    "ends" => $placeholder,
+    "sum_asked" => $placeholder,
+    "sum_granted" => $placeholder,
+    "manager_name" => $placeholder,
+    "manager_email" => $placeholder,
+    "topic_title" => $placeholder,
     "topic_purpose" => $placeholder
 ];
 
@@ -46,7 +47,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     if ($tenderCode) {
         $conn = sqlConnect();
 
-        $tenderData["code"] = $tenderCode;
+        $milestoneData["code"] = $tenderCode;
         $page = $tenderCode;
         $tenderStmt = sqlPrepareBindExecute(
             "SELECT * FROM TENDER WHERE `code`=?",
@@ -55,15 +56,15 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
             __FUNCTION__
         );
         $result = $tenderStmt->get_result();
-        $tender = $result->fetch_assoc();
-        if ($tender) {
-            $tenderData["begins"] = $tender["begins"];
-            $tenderData["ends"] = $tender["ends"];
-            $tenderData["sum_asked"] = $tender["sum_asked"];
-            $tenderData["sum_granted"] = $tender["sum_granted"];
-            $tenderData["manager_email"] = $tender["manager"];
+        $milestone = $result->fetch_assoc();
+        if ($milestone) {
+            $milestoneData["begins"] = $milestone["begins"];
+            $milestoneData["ends"] = $milestone["ends"];
+            $milestoneData["sum_asked"] = $milestone["sum_asked"];
+            $milestoneData["sum_granted"] = $milestone["sum_granted"];
+            $milestoneData["manager_email"] = $milestone["manager"];
 
-            $managerID = $tender["manager"];
+            $managerID = $milestone["manager"];
             $managerStmt = sqlPrepareBindExecute(
                 "SELECT `name` FROM USER WHERE `email`=?",
                 "s",
@@ -72,11 +73,11 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
             );
             $result = $managerStmt->get_result();
             $manager = $result->fetch_assoc();
-            if($manager) {
-                $tenderData["manager_name"] = $manager["name"];
+            if ($manager) {
+                $milestoneData["manager_name"] = $manager["name"];
             }
 
-            $topic_id = $tender["topic_id"];
+            $topic_id = $milestone["topic_id"];
             $topicStmt = sqlPrepareBindExecute(
                 "SELECT `title`, `purpose` FROM TOPIC WHERE `id`=?",
                 "i",
@@ -85,38 +86,37 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
             );
             $result = $topicStmt->get_result();
             $topic = $result->fetch_assoc();
-            if($topic) {
-                $tenderData["topic_title"] = $topic["title"];
-                $tenderData["topic_purpose"] = $topic["purpose"];
+            if ($topic) {
+                $milestoneData["topic_title"] = $topic["title"];
+                $milestoneData["topic_purpose"] = $topic["purpose"];
                 $page = $topic["title"] . " - " . $page;
             }
         } else {
-            pushFeedbackToLog("Tender disappeared!?", true);
+            pushFeedbackToLog("Milestone disappeared!?", true);
         }
 
-        domContentTableFrom($tenderData);
+        domContentTableFrom($milestoneData);
 
         sqlDisconnect();
 
-        if(isUserAdmin()) {
+        if (isUserAdmin()) {
             $buttons = $dom->getElementById("contentButtons");
-    
+
             $setMan = $dom->createElement("a", "Set manager");
             $setMan->setAttribute("class", "a_button");
-            $setMan->setAttribute("href", "../" . findPage("tender_edit"));
+            $setMan->setAttribute("href", "../" . findPage("tender_settings"));
             $buttons->appendChild($setMan);
-            
-            $listMS = $dom->createElement("a", "List milestones");
+
+            $listMS = $dom->createElement("a", "List documents");
             $listMS->setAttribute("class", "a_button");
-            $listMS->setAttribute("href", "../" . findPage("milestone_list"));
+            $listMS->setAttribute("href", "../" . findPage("document_list"));
             $buttons->appendChild($listMS);
-        }
-        else {
+        } else {
             $buttons = $dom->getElementById("contentButtons");
             $buttons->parentNode->removeChild($buttons);
         }
     } else {
-        pushFeedbackToLog("Tender isn't selected.", true);
+        pushFeedbackToLog("Milestone isn't selected.", true);
     }
 
     domSetTitle(toDisplayText($page));

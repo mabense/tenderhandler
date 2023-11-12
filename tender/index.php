@@ -103,7 +103,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     
             $setMan = $dom->createElement("a", "Set manager");
             $setMan->setAttribute("class", "a_button");
-            $setMan->setAttribute("href", "../" . findPage("tender_edit"));
+            $setMan->setAttribute("href", "../" . findPage("tender_settings"));
             $buttons->appendChild($setMan);
             
             $listMS = $dom->createElement("a", "List milestones");

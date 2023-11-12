@@ -1,6 +1,6 @@
 <?php
 define("ROOT", ".." . DIRECTORY_SEPARATOR);
-define("PAGE", "topic_new");
+define("PAGE", "new_topic");
 
 require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");

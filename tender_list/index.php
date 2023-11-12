@@ -51,12 +51,12 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
         $addTender = $dom->createElement("a", "Add new tender");
         $addTender->setAttribute("class", "a_button");
-        $addTender->setAttribute("href", "../" . findPage("tender_new"));
+        $addTender->setAttribute("href", "../" . findPage("new_tender"));
         $buttons->appendChild($addTender);
         
         $addTopic = $dom->createElement("a", "Add new topic");
         $addTopic->setAttribute("class", "a_button");
-        $addTopic->setAttribute("href", "../" . findPage("topic_new"));
+        $addTopic->setAttribute("href", "../" . findPage("new_topic"));
         $buttons->appendChild($addTopic);
     }
     else {
