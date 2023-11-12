@@ -49,9 +49,9 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     );
     sqlDisconnect();
 
-    if(isUserAdmin()) {
-        $buttons = $dom->getElementById("contentButtons");
+    $buttons = $dom->getElementById("contentButtons");
 
+    if(isUserAdmin()) {
         $addTender = $dom->createElement("a", "Add new milestone");
         $addTender->setAttribute("class", "a_button");
         $addTender->setAttribute("href", "../" . findPage("new_milestone"));
@@ -63,8 +63,10 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         $buttons->appendChild($addTopic);
     }
     else {
-        $buttons = $dom->getElementById("contentButtons");
-        $buttons->parentNode->removeChild($buttons);
+        $addTopic = $dom->createElement("a", "Back to tender");
+        $addTopic->setAttribute("class", "a_button");
+        $addTopic->setAttribute("href", "../" . findPage("tender"));
+        $buttons->appendChild($addTopic);
     }
 
     domSetTitle(toDisplayText(PAGE));

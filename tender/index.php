@@ -98,12 +98,12 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
         sqlDisconnect();
 
+        $buttons = $dom->getElementById("contentButtons");
+
         if(isUserAdmin()) {
-            $buttons = $dom->getElementById("contentButtons");
-    
             $setMan = $dom->createElement("a", "Set manager");
             $setMan->setAttribute("class", "a_button");
-            $setMan->setAttribute("href", "../" . findPage("tender_settings"));
+            $setMan->setAttribute("href", "../" . findPage("tender_edit"));
             $buttons->appendChild($setMan);
             
             $listMS = $dom->createElement("a", "List milestones");
@@ -112,8 +112,10 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
             $buttons->appendChild($listMS);
         }
         else {
-            $buttons = $dom->getElementById("contentButtons");
-            $buttons->parentNode->removeChild($buttons);
+            $listMS = $dom->createElement("a", "List milestones");
+            $listMS->setAttribute("class", "a_button");
+            $listMS->setAttribute("href", "../" . findPage("milestone_list"));
+            $buttons->appendChild($listMS);
         }
     } else {
         pushFeedbackToLog("Tender isn't selected.", true);

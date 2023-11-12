@@ -19,20 +19,17 @@ domHandleAction();
 
 domHandleTableRow();
 $tenderCode = getTender();
+$msCode = getMilestone();
 
 $page = PAGE;
 $placeholder = "...";
-// $tender = [
 $milestoneData = [
-    "code" => $placeholder,
-    "begins" => $placeholder,
-    "ends" => $placeholder,
-    "sum_asked" => $placeholder,
-    "sum_granted" => $placeholder,
-    "manager_name" => $placeholder,
-    "manager_email" => $placeholder,
-    "topic_title" => $placeholder,
-    "topic_purpose" => $placeholder
+    "tender" => $placeholder,
+    "number" => $placeholder,
+    "name" => $placeholder,
+    "date" => $placeholder,
+    "description" => $placeholder,
+    "progress" => $placeholder
 ];
 
 $dom = new DOMDocument();
@@ -44,52 +41,48 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    if ($tenderCode) {
+    if ($tenderCode && $msCode) {
         $conn = sqlConnect();
 
-        $milestoneData["code"] = $tenderCode;
-        $page = $tenderCode;
-        $tenderStmt = sqlPrepareBindExecute(
-            "SELECT * FROM TENDER WHERE `code`=?",
-            "s",
-            [$tenderCode],
+        $milestoneData["tender"] = $tenderCode;
+        $milestoneData["number"] = $msCode;
+        $page = $tenderCode . ": " . $msCode . ". Milestone";
+        $msStmt = sqlPrepareBindExecute(
+            "SELECT * FROM MILESTONE WHERE `tender`=? AND  `number`=?",
+            "si",
+            [$tenderCode, $msCode],
             __FUNCTION__
         );
-        $result = $tenderStmt->get_result();
+        $result = $msStmt->get_result();
         $milestone = $result->fetch_assoc();
         if ($milestone) {
-            $milestoneData["begins"] = $milestone["begins"];
-            $milestoneData["ends"] = $milestone["ends"];
-            $milestoneData["sum_asked"] = $milestone["sum_asked"];
-            $milestoneData["sum_granted"] = $milestone["sum_granted"];
-            $milestoneData["manager_email"] = $milestone["manager"];
+            $milestoneData["name"] = $milestone["name"];
+            $milestoneData["date"] = $milestone["date"];
+            $milestoneData["description"] = $milestone["description"];
+            $milestoneData["progress"] = $milestone["progress"];
 
-            $managerID = $milestone["manager"];
-            $managerStmt = sqlPrepareBindExecute(
-                "SELECT `name` FROM USER WHERE `email`=?",
+            $tenderStmt = sqlPrepareBindExecute(
+                "SELECT `topic_id` FROM TENDER WHERE `code`=?",
                 "s",
-                [$managerID],
+                [$tenderCode],
                 __FUNCTION__
             );
-            $result = $managerStmt->get_result();
-            $manager = $result->fetch_assoc();
-            if ($manager) {
-                $milestoneData["manager_name"] = $manager["name"];
-            }
-
-            $topic_id = $milestone["topic_id"];
-            $topicStmt = sqlPrepareBindExecute(
-                "SELECT `title`, `purpose` FROM TOPIC WHERE `id`=?",
-                "i",
-                [$topic_id],
-                __FUNCTION__
-            );
-            $result = $topicStmt->get_result();
-            $topic = $result->fetch_assoc();
-            if ($topic) {
-                $milestoneData["topic_title"] = $topic["title"];
-                $milestoneData["topic_purpose"] = $topic["purpose"];
-                $page = $topic["title"] . " - " . $page;
+            $result = $tenderStmt->get_result();
+            $tender = $result->fetch_assoc();
+            if ($tender) {
+                $topic_id = $tender["topic_id"];
+                $topicStmt = sqlPrepareBindExecute(
+                    "SELECT `title` FROM TOPIC WHERE `id`=?",
+                    "i",
+                    [$topic_id],
+                    __FUNCTION__
+                );
+                $result = $topicStmt->get_result();
+                $topic = $result->fetch_assoc();
+                if ($topic) {
+                    $milestoneData["topic_title"] = $topic["title"];
+                    $page = $topic["title"] . " - " . $page;
+                }
             }
         } else {
             pushFeedbackToLog("Milestone disappeared!?", true);
@@ -99,21 +92,33 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
         sqlDisconnect();
 
+        $buttons = $dom->getElementById("contentButtons");
+
         if (isUserAdmin()) {
-            $buttons = $dom->getElementById("contentButtons");
+            $delMS = $dom->createElement("a", "Delete milestone");
+            $delMS->setAttribute("class", "a_button");
+            $delMS->setAttribute("href", "../" . findPage("delete_milestone"));
+            $buttons->appendChild($delMS);
 
-            $setMan = $dom->createElement("a", "Set manager");
-            $setMan->setAttribute("class", "a_button");
-            $setMan->setAttribute("href", "../" . findPage("tender_settings"));
-            $buttons->appendChild($setMan);
+            $listDoc = $dom->createElement("a", "List documents");
+            $listDoc->setAttribute("class", "a_button");
+            $listDoc->setAttribute("href", "../" . findPage("document_list"));
+            $buttons->appendChild($listDoc);
 
-            $listMS = $dom->createElement("a", "List documents");
+            $listMS = $dom->createElement("a", "Other milestones");
             $listMS->setAttribute("class", "a_button");
-            $listMS->setAttribute("href", "../" . findPage("document_list"));
+            $listMS->setAttribute("href", "../" . findPage("milestone_list"));
             $buttons->appendChild($listMS);
         } else {
-            $buttons = $dom->getElementById("contentButtons");
-            $buttons->parentNode->removeChild($buttons);
+            $listDoc = $dom->createElement("a", "List documents");
+            $listDoc->setAttribute("class", "a_button");
+            $listDoc->setAttribute("href", "../" . findPage("document_list"));
+            $buttons->appendChild($listDoc);
+
+            $listMS = $dom->createElement("a", "Other milestones");
+            $listMS->setAttribute("class", "a_button");
+            $listMS->setAttribute("href", "../" . findPage("milestone_list"));
+            $buttons->appendChild($listMS);
         }
     } else {
         pushFeedbackToLog("Milestone isn't selected.", true);
