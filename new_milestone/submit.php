@@ -28,9 +28,9 @@ if (
 }
 
 if ($result) {
-    pushFeedbackToLog("Tender added successfully.");
+    pushFeedbackToLog("Milestone added successfully.");
 } elseif (!isThereFeedback()) {
-    pushFeedbackToLog("Failed to add tender.", true);
+    pushFeedbackToLog("Failed to add milestone.", true);
 }
 $page = "milestone_list";
 redirectTo(ROOT, $page);

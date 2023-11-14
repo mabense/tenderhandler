@@ -48,7 +48,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         $milestoneData["number"] = $msCode;
         $page = $tenderCode . ": " . $msCode . ". Milestone";
         $msStmt = sqlPrepareBindExecute(
-            "SELECT * FROM MILESTONE WHERE `tender`=? AND  `number`=?",
+            "SELECT * FROM MILESTONE WHERE `tender`=? AND `number`=?",
             "si",
             [$tenderCode, $msCode],
             __FUNCTION__
