@@ -56,6 +56,7 @@ function resetUser()
     unset($_SESSION["uAdmin"]);
     resetTender();
     resetMilestone();
+    resetMilestoneTitle();
     resetDocument();
     resetTableAllKeys();
     return !isset($_SESSION["uEmail"]);
@@ -125,6 +126,28 @@ function resetMilestone()
     setMilestone(false);
     unset($_SESSION["milestone"]);
     return !isset($_SESSION["milestone"]);
+}
+
+
+function getMilestoneTitle()
+{
+    if (!isset($_SESSION["ms_title"])) {
+        return false;
+    }
+    return $_SESSION["ms_title"];
+}
+
+
+function setMilestoneTitle($str)
+{
+    $_SESSION["ms_title"] = $str;
+}
+
+function resetMilestoneTitle()
+{
+    setMilestone(false);
+    unset($_SESSION["ms_title"]);
+    return !isset($_SESSION["ms_title"]);
 }
 
 

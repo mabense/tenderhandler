@@ -67,7 +67,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     $goBack->setAttribute("href", "../" . findPage("milestone"));
     $buttons->appendChild($goBack);
 
-    domSetTitle(toDisplayText(PAGE));
+    domSetTitle(toDisplayText(getMilestoneTitle() . " - Documents"));
 
     domPopFeedback();
 }

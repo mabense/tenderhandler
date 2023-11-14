@@ -57,14 +57,21 @@ function sqlNewMilestone($tender, $name, $date, $description)
 }
 
 
-function sqlNewDocument($_)
+function sqlNewDocument($tender, $ms, $req, $parti, $submit_date, $verify_date)
 {
-    $fields = "(`title`, `purpose`)";
-    $sql = "INSERT INTO DOCUMENT $fields VALUES (?, ?)";
+    $fields = "(`tender`, `milestone`, `requirement`, `participant`, `deadline_submit`, `deadline_verify`)";
+    $sql = "INSERT INTO DOCUMENT $fields VALUES (?, ?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
-        "s",
-        [$_],
+        "sissss",
+        [
+            $tender, 
+            $ms, 
+            $req, 
+            $parti, 
+            $submit_date, 
+            $verify_date
+        ],
         __FUNCTION__
     );
     return $success;
