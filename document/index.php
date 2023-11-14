@@ -1,6 +1,6 @@
 <?php
 define("ROOT", ".." . DIRECTORY_SEPARATOR);
-define("PAGE", "milestone");
+define("PAGE", "document");
 
 require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");
@@ -20,16 +20,19 @@ domHandleAction();
 domHandleTableRow();
 $tenderCode = getTender();
 $msCode = getMilestone();
+$docReq = getDocument();
 
 $page = PAGE;
 $placeholder = "...";
-$milestoneData = [
+$docData = [
     "tender" => $placeholder,
-    "number" => $placeholder,
-    "name" => $placeholder,
-    "date" => $placeholder,
-    "description" => $placeholder,
-    "progress" => $placeholder
+    "ms" => $placeholder,
+    "req" => $placeholder,
+    "parti" => $placeholder,
+    "fulfilled" => $placeholder,
+    "sum_paid" => $placeholder,
+    "submit_date" => $placeholder,
+    "verify_date" => $placeholder
 ];
 
 $dom = new DOMDocument();
@@ -41,81 +44,58 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    if ($tenderCode && $msCode) {
+    if ($tenderCode && $msCode && $docReq) {
         $conn = sqlConnect();
 
-        $milestoneData["tender"] = $tenderCode;
-        $milestoneData["number"] = $msCode;
-        $page = $tenderCode . ": " . $msCode . ". Milestone";
-        $msStmt = sqlPrepareBindExecute(
-            "SELECT * FROM MILESTONE WHERE `tender`=? AND `number`=?",
-            "si",
-            [$tenderCode, $msCode],
+        $docData["tender"] = $tenderCode;
+        $docData["ms"] = $msCode;
+        $docData["req"] = $docReq;
+        $page = getMilestoneTitle() . " - " . $docReq;
+        $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
+        $docStmt = sqlPrepareBindExecute(
+            "SELECT $fields FROM DOCUMENT WHERE `tender`=? AND `milestone`=? AND `requirement`=?",
+            "sis",
+            [$tenderCode, $msCode, $docReq],
             __FUNCTION__
         );
-        $result = $msStmt->get_result();
-        $milestone = $result->fetch_assoc();
-        if ($milestone) {
-            $milestoneData["name"] = $milestone["name"];
-            $milestoneData["date"] = $milestone["date"];
-            $milestoneData["description"] = $milestone["description"];
-            $milestoneData["progress"] = $milestone["progress"];
-
-            $tenderStmt = sqlPrepareBindExecute(
-                "SELECT `topic_id` FROM TENDER WHERE `code`=?",
-                "s",
-                [$tenderCode],
-                __FUNCTION__
-            );
-            $result = $tenderStmt->get_result();
-            $tender = $result->fetch_assoc();
-            if ($tender) {
-                $topic_id = $tender["topic_id"];
-                $topicStmt = sqlPrepareBindExecute(
-                    "SELECT `title` FROM TOPIC WHERE `id`=?",
-                    "i",
-                    [$topic_id],
-                    __FUNCTION__
-                );
-                $result = $topicStmt->get_result();
-                $topic = $result->fetch_assoc();
-                if ($topic) {
-                    $milestoneData["topic_title"] = $topic["title"];
-                    $page = $topic["title"] . " - " . $page;
-                }
-            }
+        $result = $docStmt->get_result();
+        $doc = $result->fetch_assoc();
+        if ($doc) {
+            $docData["parti"] = $doc["participant"];
+            $docData["fulfilled"] = $doc["fulfilled"];
+            $docData["sum_paid"] = $doc["sum_paid"];
+            $docData["submit_date"] = $doc["deadline_submit"];
+            $docData["verify_date"] = $doc["deadline_verify"];
         } else {
-            pushFeedbackToLog("Milestone disappeared!?", true);
+            pushFeedbackToLog("Document disappeared!?", true);
         }
 
-        domContentTableFrom($milestoneData);
+        domContentTableFrom($docData);
 
         sqlDisconnect();
 
         $buttons = $dom->getElementById("contentButtons");
 
-        if (isUserAdmin()) {
-            $delMS = $dom->createElement("a", "Delete Milestone");
-            $delMS->setAttribute("class", "a_button");
-            $delMS->setAttribute("href", "../" . findPage("delete_milestone"));
-            $buttons->appendChild($delMS);
+        $down = $dom->createElement("a", "Download Document");
+        $down->setAttribute("class", "a_button");
+        $down->setAttribute("href", "../" . findPage("download"));
+        $buttons->appendChild($down);
+
+        if (!isUserAdmin()) {
+            $up = $dom->createElement("a", "Upload Document");
+            $up->setAttribute("class", "a_button");
+            $up->setAttribute("href", "../" . findPage("upload"));
+            $buttons->appendChild($up);
         }
 
-        $listDoc = $dom->createElement("a", "List Documents");
+        $listDoc = $dom->createElement("a", "Other Documents");
         $listDoc->setAttribute("class", "a_button");
         $listDoc->setAttribute("href", "../" . findPage("document_list"));
         $buttons->appendChild($listDoc);
-
-        $listMS = $dom->createElement("a", "Other Milestones");
-        $listMS->setAttribute("class", "a_button");
-        $listMS->setAttribute("href", "../" . findPage("milestone_list"));
-        $buttons->appendChild($listMS);
-        
     } else {
-        pushFeedbackToLog("Milestone isn't selected.", true);
+        pushFeedbackToLog("Document isn't selected.", true);
     }
 
-    setMilestoneTitle($page);
     domSetTitle(toDisplayText($page));
 
     domPopFeedback();
