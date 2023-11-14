@@ -1,6 +1,6 @@
 <?php
 define("ROOT", ".." . DIRECTORY_SEPARATOR);
-define("PAGE", "milestone_list");
+define("PAGE", "document_list");
 
 require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");
@@ -10,6 +10,7 @@ require_once(LIB_DIR . "sql.php");
 haveSession();
 
 $tenderCode = getTender();
+$msCode = getMilestone();
 
 if(!auth(false, true, true)){
     redirectTo(ROOT, "log_in");
@@ -30,21 +31,25 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
     $conn = sqlConnect();
+    $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
+    // $sql = "";
     sqlQueryContentParam(
-        "SELECT * FROM MILESTONE WHERE `tender`=?", 
-        "s", 
-        [$tenderCode], 
+        "SELECT $fields FROM DOCUMENT WHERE `tender`=? AND  `milestone`=?",
+        "si",
+        [$tenderCode, $msCode],
         [
             "tender", 
-            "number", 
-            "name", 
-            "date", 
-            "description", 
-            "progress"
+            "milestone", 
+            "about", 
+            "by", 
+            "fulfilled", 
+            "sum_paid", 
+            "submit till", 
+            "verify till"
         ], 
-        "milestone", 
+        "document", 
         [
-            "number"
+            "requirement"
         ]
     );
     sqlDisconnect();
@@ -52,14 +57,14 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     $buttons = $dom->getElementById("contentButtons");
 
     if(isUserAdmin()) {
-        $addMS = $dom->createElement("a", "Add New Milestone");
-        $addMS->setAttribute("class", "a_button");
-        $addMS->setAttribute("href", "../" . findPage("new_milestone"));
-        $buttons->appendChild($addMS);
+        $addDoc = $dom->createElement("a", "Add New Document");
+        $addDoc->setAttribute("class", "a_button");
+        $addDoc->setAttribute("href", "../" . findPage("new_document"));
+        $buttons->appendChild($addDoc);
     }
-    $goBack = $dom->createElement("a", "Back to Tender");
+    $goBack = $dom->createElement("a", "Back to Milestone");
     $goBack->setAttribute("class", "a_button");
-    $goBack->setAttribute("href", "../" . findPage("tender"));
+    $goBack->setAttribute("href", "../" . findPage("milestone"));
     $buttons->appendChild($goBack);
 
     domSetTitle(toDisplayText(PAGE));

@@ -45,22 +45,22 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         ]
     );
     sqlDisconnect();
+    
+    $buttons = $dom->getElementById("contentButtons");
 
     if(isUserAdmin()) {
-        $buttons = $dom->getElementById("contentButtons");
 
-        $addTender = $dom->createElement("a", "Add new tender");
+        $addTender = $dom->createElement("a", "Add New Tender");
         $addTender->setAttribute("class", "a_button");
         $addTender->setAttribute("href", "../" . findPage("new_tender"));
         $buttons->appendChild($addTender);
         
-        $addTopic = $dom->createElement("a", "Add new topic");
+        $addTopic = $dom->createElement("a", "Add New Topic");
         $addTopic->setAttribute("class", "a_button");
         $addTopic->setAttribute("href", "../" . findPage("new_topic"));
         $buttons->appendChild($addTopic);
     }
     else {
-        $buttons = $dom->getElementById("contentButtons");
         $buttons->parentNode->removeChild($buttons);
     }
 

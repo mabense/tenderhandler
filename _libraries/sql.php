@@ -36,13 +36,13 @@ function sqlNewMilestone($tender, $name, $date, $description)
 {
     $number = 1;
     $numStmt = sqlPrepareBindExecute(
-        "SELECT MAX(`number`) AS max FROM MILESTONE WHERE `tender`=?", 
-        "s", 
-        [$tender], 
+        "SELECT MAX(`number`) AS max FROM MILESTONE WHERE `tender`=?",
+        "s",
+        [$tender],
         __FUNCTION__
     );
     $numResult = $numStmt->get_result();
-    if($numRow = $numResult->fetch_assoc()) {
+    if ($numRow = $numResult->fetch_assoc()) {
         $number = $numRow["max"] + 1;
     }
     $fields = "(`tender`, `number`, `name`, `date`, `description`)";
@@ -79,22 +79,18 @@ function sqlQueryContentParam($sqlQuery, $sqlTypes, $sqlParams, $tabelColumns = 
     $dom = new DOMDocument();
     global $dom;
     $contentTag = $dom->getElementById("content");
-    /* */
+    
     $stmt = sqlPrepareBindExecute(
-        $sqlQuery, 
-        $sqlTypes, 
-        $sqlParams, 
+        $sqlQuery,
+        $sqlTypes,
+        $sqlParams,
         __FUNCTION__
     );
     $result = $stmt->get_result();
-    if (!$result) {
-        return $contentTag;
+    if ($result) {
+        $tableTag = sqlQueryTable($result, $tabelColumns, $onClickRoute, $keyAttributes);
+        $contentTag->appendChild($tableTag);
     }
-
-    $tableTag = sqlQueryTable($result, $tabelColumns, $onClickRoute, $keyAttributes);
-    $contentTag->appendChild($tableTag);
-
-    // return $contentTag;
 }
 
 
@@ -196,9 +192,9 @@ function sqlQueryTableRow($sqlResultRow, $onClickRoute, $rowIndex)
 {
     $dom = new DOMDocument();
     global $dom;
-    $trRoute = ($onClickRoute == "") 
-    ? "./" 
-    : "../" . findPage($onClickRoute) . "/?row=" . $rowIndex;
+    $trRoute = ($onClickRoute == "")
+        ? "./"
+        : "../" . findPage($onClickRoute) . "/?row=" . $rowIndex;
 
     $tr = $dom->createElement("tr");
     $tr->setAttribute(

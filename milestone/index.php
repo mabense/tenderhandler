@@ -95,31 +95,22 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         $buttons = $dom->getElementById("contentButtons");
 
         if (isUserAdmin()) {
-            $delMS = $dom->createElement("a", "Delete milestone");
+            $delMS = $dom->createElement("a", "Delete Milestone");
             $delMS->setAttribute("class", "a_button");
             $delMS->setAttribute("href", "../" . findPage("delete_milestone"));
             $buttons->appendChild($delMS);
-
-            $listDoc = $dom->createElement("a", "List documents");
-            $listDoc->setAttribute("class", "a_button");
-            $listDoc->setAttribute("href", "../" . findPage("document_list"));
-            $buttons->appendChild($listDoc);
-
-            $listMS = $dom->createElement("a", "Other milestones");
-            $listMS->setAttribute("class", "a_button");
-            $listMS->setAttribute("href", "../" . findPage("milestone_list"));
-            $buttons->appendChild($listMS);
-        } else {
-            $listDoc = $dom->createElement("a", "List documents");
-            $listDoc->setAttribute("class", "a_button");
-            $listDoc->setAttribute("href", "../" . findPage("document_list"));
-            $buttons->appendChild($listDoc);
-
-            $listMS = $dom->createElement("a", "Other milestones");
-            $listMS->setAttribute("class", "a_button");
-            $listMS->setAttribute("href", "../" . findPage("milestone_list"));
-            $buttons->appendChild($listMS);
         }
+
+        $listDoc = $dom->createElement("a", "List Documents");
+        $listDoc->setAttribute("class", "a_button");
+        $listDoc->setAttribute("href", "../" . findPage("document_list"));
+        $buttons->appendChild($listDoc);
+
+        $listMS = $dom->createElement("a", "Other Milestones");
+        $listMS->setAttribute("class", "a_button");
+        $listMS->setAttribute("href", "../" . findPage("milestone_list"));
+        $buttons->appendChild($listMS);
+        
     } else {
         pushFeedbackToLog("Milestone isn't selected.", true);
     }
