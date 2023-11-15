@@ -223,7 +223,7 @@ function sqlQueryMilestoneRow($sqlResultRow, $onClickRoute, $rowIndex = 0)
     $tr->setAttribute("onclick", "window.location='" . $trRoute . "';");
 
     $td_MS = $dom->createElement("td");
-    $td_MS->textContent = $sqlResultRow["milestone"];
+    $td_MS->textContent = $sqlResultRow["number"];
     $tr->appendChild($td_MS);
 
     $td_name = $dom->createElement("td");
@@ -239,7 +239,7 @@ function sqlQueryMilestoneRow($sqlResultRow, $onClickRoute, $rowIndex = 0)
     $tr->appendChild($td_progress);
 
     $td_founds = $dom->createElement("td");
-    $td_founds->textContent = $sqlResultRow["paid"] . "/" . $sqlResultRow["sum_granted"];
+    $td_founds->textContent = $sqlResultRow["paid"];
     $tr->appendChild($td_founds);
 
     return $tr;

@@ -79,7 +79,8 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         ) AS DOC
     ) AS EVERYTHING
     GROUP BY EVERYTHING.`tender`, EVERYTHING.`milestone`";
-    /*/
+
+    /* * /
     $sql = "SELECT `tender`, `milestone` AS number, `name`, `date`, 
     SUM(NOT ISNULL(`document`)) AS files, SUM(NOT ISNULL(`requirement`)) AS reqs, 
     SUM(NOT ISNULL(`sum_paid`)) AS paid, `sum_granted`
@@ -99,7 +100,20 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         ) AS DOC
     ) AS EVERYTHING
     GROUP BY EVERYTHING.`tender`, EVERYTHING.`milestone`";
+    /* /
+    $sql = "SELECT `tender`, `number`, `name`, `date` 
+    FROM MILESTONE 
+    WHERE `tender`='BeadandóDB'";
     /* */
+    $sql = "SELECT `tender`, `milestone` AS number, `name`, `date`, 
+    SUM(NOT ISNULL(`document`)) AS files, SUM(NOT ISNULL(`requirement`)) AS reqs, 
+    SUM(`sum_paid`) AS paid
+    FROM (
+        (SELECT `tender`, `number` AS milestone, `name`, `date` FROM MILESTONE WHERE `tender`=?) AS MS 
+        NATURAL LEFT JOIN 
+        (SELECT `tender`, `milestone`, `document`, `requirement`, `sum_paid` FROM DOCUMENT) AS DOC
+    )
+    GROUP BY `tender`, `milestone`;";
 
     $conn = sqlConnect();
     sqlQueryContentParam(
@@ -111,12 +125,13 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
             "name",
             "date",
             "files/required",
-            "paid/granted"
+            "paid out"
         ],
         "milestone",
         [
             "number"
-        ]
+        ], 
+        true
     );
     sqlDisconnect();
 

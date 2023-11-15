@@ -29,8 +29,8 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     // $sql = "SELECT * FROM MILESTONE";
     // $sql = "SELECT `date`, `number` FROM MILESTONE";
-    $sql = "SELECT YEAR(`date`) AS year, MONTH(`date`) AS month, COUNT(`number`) AS due " .
-        "FROM MILESTONE GROUP BY year, month";
+    $sql = "SELECT YEAR(`date`) AS year, MONTH(`date`) AS month, COUNT(`number`) AS due 
+    FROM MILESTONE GROUP BY year, month";
 
     $conn = sqlConnect();
     sqlQueryContent(
