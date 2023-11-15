@@ -27,16 +27,17 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
+    $fields = "`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`";
     $conn = sqlConnect();
     sqlQueryContent(
-        "SELECT * FROM TENDER", 
+        "SELECT $fields FROM TENDER", 
         [
             "code", 
             "begins", 
             "ends", 
             "proposed", 
             "granted", 
-            "topic", 
+            // "topic", 
             "manager"
         ], 
         "tender", 
