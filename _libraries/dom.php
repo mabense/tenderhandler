@@ -121,7 +121,6 @@ function domMakeToolbarLoggedIn()
     }
 }
 
-
 function domContentTableFrom($assocArray)
 {
     $dom = new DOMDocument();

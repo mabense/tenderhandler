@@ -2,7 +2,7 @@
 require_once(LIB_DIR . "sql.php");
 
 haveSession();
-$user = false;
+$user = getUserEmail();
 $page = PAGE;
 
 $code = $_POST["code"];
@@ -16,7 +16,8 @@ $manager = $_POST["manager"];
 $result = false;
 
 if (
-    isset($code)
+    isset($user)
+    && isset($code)
     && isset($begin)
     && isset($end)
     && isset($asked)
@@ -25,11 +26,13 @@ if (
     && isset($manager)
 ) {
     $GLOBALS["conn"] = sqlConnect();
-    /* */
-    $result = sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager);
-    /*/
-    $result = sqlNewTender('proba_5','2020-02-02','2023-12-12',100,10, 'qqqq','q');
-    /* */
+    $result = sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager) 
+    && sqlPrepareBindExecute(
+        "INSERT INTO ADMIN (`admin`, `tender`) VALUES (?, ?)", 
+        "ss", 
+        [$user, $code], 
+        __FUNCTION__
+    );
     sqlDisconnect();
 }
 

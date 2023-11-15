@@ -65,11 +65,11 @@ function sqlNewDocument($tender, $ms, $req, $parti, $submit_date, $verify_date)
         $sql,
         "sissss",
         [
-            $tender, 
-            $ms, 
-            $req, 
-            $parti, 
-            $submit_date, 
+            $tender,
+            $ms,
+            $req,
+            $parti,
+            $submit_date,
             $verify_date
         ],
         __FUNCTION__
@@ -81,12 +81,19 @@ function sqlNewDocument($tender, $ms, $req, $parti, $submit_date, $verify_date)
 // Query page
 
 
-function sqlQueryContentParam($sqlQuery, $sqlTypes, $sqlParams, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [])
-{
+function sqlQueryContentParam(
+    $sqlQuery,
+    $sqlTypes,
+    $sqlParams,
+    $tabelColumns = [],
+    $onClickRoute = "",
+    $keyAttributes = [],
+    $isSpecialMS = false
+) {
     $dom = new DOMDocument();
     global $dom;
     $contentTag = $dom->getElementById("content");
-    
+
     $stmt = sqlPrepareBindExecute(
         $sqlQuery,
         $sqlTypes,
@@ -95,7 +102,7 @@ function sqlQueryContentParam($sqlQuery, $sqlTypes, $sqlParams, $tabelColumns = 
     );
     $result = $stmt->get_result();
     if ($result) {
-        $tableTag = sqlQueryTable($result, $tabelColumns, $onClickRoute, $keyAttributes);
+        $tableTag = sqlQueryTable($result, $tabelColumns, $onClickRoute, $keyAttributes, $isSpecialMS);
         $contentTag->appendChild($tableTag);
     }
 }
@@ -123,7 +130,7 @@ function sqlQueryContent($sql, $tabelColumns = [], $onClickRoute = "", $keyAttri
 }
 
 
-function sqlQueryTable($sqlResult, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [])
+function sqlQueryTable($sqlResult, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [], $isSpecialMS = false)
 {
     $dom = new DOMDocument();
     global $dom;
@@ -141,7 +148,11 @@ function sqlQueryTable($sqlResult, $tabelColumns = [], $onClickRoute = "", $keyA
         $tableKeys = [];
         $i = 0;
         while ($row = $sqlResult->fetch_assoc()) {
-            $tr = sqlQueryTableRow($row, $onClickRoute, $i);
+            if ($isSpecialMS) {
+                $tr = sqlQueryMilestoneRow($row, $onClickRoute, $i);
+            } else {
+                $tr = sqlQueryTableRow($row, $onClickRoute, $i);
+            }
 
             $rowKey = [];
             foreach ($keyAttributes as $key) {
@@ -192,6 +203,45 @@ function sqlQueryTableEmptyRow($columnCount)
         $td->appendChild($nbsp);
         $tr->appendChild($td);
     }
+    return $tr;
+}
+
+function sqlQueryMilestoneRow($sqlResultRow, $onClickRoute, $rowIndex = 0)
+{
+    $dom = new DOMDocument();
+    global $dom;
+    $trRoute = ($onClickRoute == "")
+        ? "./"
+        : "../" . findPage($onClickRoute) . "/?row=" . $rowIndex;
+
+    $tr = $dom->createElement("tr");
+    $tr->setAttribute(
+        "class",
+        ($rowIndex % 2 == 0) ? "even_row" : "odd_row"
+    );
+
+    $tr->setAttribute("onclick", "window.location='" . $trRoute . "';");
+
+    $td_MS = $dom->createElement("td");
+    $td_MS->textContent = $sqlResultRow["milestone"];
+    $tr->appendChild($td_MS);
+
+    $td_name = $dom->createElement("td");
+    $td_name->textContent = $sqlResultRow["name"];
+    $tr->appendChild($td_name);
+
+    $td_date = $dom->createElement("td");
+    $td_date->textContent = $sqlResultRow["date"];
+    $tr->appendChild($td_date);
+
+    $td_progress = $dom->createElement("td");
+    $td_progress->textContent = $sqlResultRow["files"] . "/" . $sqlResultRow["reqs"];
+    $tr->appendChild($td_progress);
+
+    $td_founds = $dom->createElement("td");
+    $td_founds->textContent = $sqlResultRow["paid"] . "/" . $sqlResultRow["sum_granted"];
+    $tr->appendChild($td_founds);
+
     return $tr;
 }
 
@@ -273,7 +323,7 @@ function sqlLogin($email, $password)
     $user = $result->fetch_assoc();
 
     $uExists = ($user !== null);
-    $pwdMatch = passwordCompare($password, $user["password"]);
+    $pwdMatch = password_verify($password, $user["password"]);
     if (!$uExists || !$pwdMatch) {
         pushFeedbackToLog("Incorrect email address or password.", true);
         return false;
@@ -302,6 +352,7 @@ function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
         pushFeedbackToLog("The passwords don't match.", true);
         return false;
     }
+    $password = password_hash($password, PASSWORD_BCRYPT);
     $fields = "(`email`, `password`, `name`, `is_admin`)";
     $sql = "INSERT INTO USER $fields VALUES (?, ?, ?, ?)";
     $stmt = sqlPrepareBindExecute(

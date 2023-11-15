@@ -26,13 +26,13 @@ $page = PAGE;
 $placeholder = "...";
 $docData = [
     "tender" => $placeholder,
-    "ms" => $placeholder,
-    "req" => $placeholder,
-    "parti" => $placeholder,
+    "milestone" => $placeholder,
+    "what's required" => $placeholder,
+    "participant" => $placeholder,
     "fulfilled" => $placeholder,
     "sum_paid" => $placeholder,
-    "submit_date" => $placeholder,
-    "verify_date" => $placeholder
+    "deadline_submit" => $placeholder,
+    "deadline_verify" => $placeholder
 ];
 
 $dom = new DOMDocument();
@@ -48,8 +48,8 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         $conn = sqlConnect();
 
         $docData["tender"] = $tenderCode;
-        $docData["ms"] = $msCode;
-        $docData["req"] = $docReq;
+        $docData["milestone"] = $msCode;
+        $docData["what's required"] = $docReq;
         $page = getMilestoneTitle() . " - " . $docReq;
         $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
         $docStmt = sqlPrepareBindExecute(
@@ -61,11 +61,11 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         $result = $docStmt->get_result();
         $doc = $result->fetch_assoc();
         if ($doc) {
-            $docData["parti"] = $doc["participant"];
+            $docData["participant"] = $doc["participant"];
             $docData["fulfilled"] = $doc["fulfilled"];
             $docData["sum_paid"] = $doc["sum_paid"];
-            $docData["submit_date"] = $doc["deadline_submit"];
-            $docData["verify_date"] = $doc["deadline_verify"];
+            $docData["deadline_submit"] = $doc["deadline_submit"];
+            $docData["deadline_verify"] = $doc["deadline_verify"];
         } else {
             pushFeedbackToLog("Document disappeared!?", true);
         }
