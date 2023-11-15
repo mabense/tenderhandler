@@ -9,7 +9,7 @@ require_once(LIB_DIR . "sql.php");
 
 haveSession();
 
-if(!auth(false, true, true)){
+if (!auth(false, true, true)) {
     redirectTo(ROOT, "log_in");
 }
 
@@ -27,16 +27,22 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
+    // $sql = "SELECT * FROM MILESTONE";
+    // $sql = "SELECT `date`, `number` FROM MILESTONE";
+    $sql = "SELECT YEAR(`date`) AS year, MONTH(`date`) AS month, COUNT(`number`) AS due " .
+        "FROM MILESTONE GROUP BY year, month";
+
     $conn = sqlConnect();
     sqlQueryContent(
-        "SELECT * FROM MILESTONE",
+        $sql,
         [
+            "year",
             "month",
             "milestones due"
         ]
     );
     sqlDisconnect();
-    
+
     $buttons = $dom->getElementById("contentButtons");
     $buttons->parentNode->removeChild($buttons);
 
