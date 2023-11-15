@@ -11,7 +11,7 @@ haveSession();
 
 $tenderCode = getTender();
 
-if(!auth(false, true, true)){
+if (!auth(false, true, true)) {
     redirectTo(ROOT, "log_in");
 }
 
@@ -29,20 +29,41 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
+    // $sql = "SELECT * FROM MILESTONE WHERE `tender`=?";
+    // $sql = "SELECT `number`, `name`, `date`, `description`, `progress` FROM MILESTONE WHERE `tender`=?";
+    // $sql = "SELECT `number`, `name`, `date`, COUNT(DOCUMENT.`document`) AS doc_up, COUNT(DOCUMENT.`requirement`) AS doc_req " .
+    //     "FROM MILESTONE LEFT JOIN DOCUMENT " .
+    //     "ON MILESTONE.`tender`=DOCUMENT.`tender` AND MILESTONE.`number`=DOCUMENT.`milestone`" .
+    //     "WHERE MILESTONE.`tender`=?";
+    // $sql = "SELECT `number`, `name`, `date` FROM MILESTONE WHERE `tender`=?";
+    // $sql = "SELECT `number`, `name`, `date`, NOT ISNULL(DOCUMENT.`document`) AS doc_up, DOCUMENT.`requirement` AS doc_req " .
+    //     "FROM MILESTONE LEFT JOIN DOCUMENT " .
+    //     "ON MILESTONE.`tender`=DOCUMENT.`tender` AND MILESTONE.`number`=DOCUMENT.`milestone`" .
+    //     "WHERE MILESTONE.`tender`=?";
+    $sql = "SELECT MSDOC.`number`, MSDOC.`name`, MSDOC.`date`, SUM(MSDOC.`doc_up`) AS `doc_ups`, SUM(MSDOC.`doc_req`) AS `doc_reqs`
+    FROM(
+        SELECT `number`, `name`, `date`, NOT ISNULL(DOCUMENT.`document`) AS `doc_up`, NOT ISNULL(DOCUMENT.`requirement`) AS `doc_req` 
+        FROM MILESTONE LEFT JOIN DOCUMENT 
+        ON MILESTONE.`tender`=DOCUMENT.`tender` AND MILESTONE.`number`=DOCUMENT.`milestone` 
+        WHERE MILESTONE.`tender`='ASDasd'
+    ) AS MSDOC
+    GROUP BY MSDOC.`number`;";
+
     $conn = sqlConnect();
     sqlQueryContentParam(
-        "SELECT * FROM MILESTONE WHERE `tender`=?", 
-        "s", 
-        [$tenderCode], 
+        $sql,
+        "s",
+        [$tenderCode],
         [
-            "tender", 
-            "number", 
-            "name", 
-            "date", 
-            "description", 
-            "progress"
-        ], 
-        "milestone", 
+            "number",
+            "name",
+            "date",
+            "uploaded",
+            "required",
+            "paid",
+            "granted"
+        ],
+        "milestone",
         [
             "number"
         ]
@@ -51,7 +72,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     $buttons = $dom->getElementById("contentButtons");
 
-    if(isUserAdmin()) {
+    if (isUserAdmin()) {
         $addMS = $dom->createElement("a", "Add New Milestone");
         $addMS->setAttribute("class", "a_button");
         $addMS->setAttribute("href", "../" . findPage("new_milestone"));
@@ -62,7 +83,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     $goBack->setAttribute("href", "../" . findPage("tender"));
     $buttons->appendChild($goBack);
 
-    domSetTitle(toDisplayText(PAGE));
+    domSetTitle(toDisplayText($tenderCode . " - " . PAGE));
 
     domPopFeedback();
 }

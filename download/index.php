@@ -37,6 +37,9 @@ if (
     );
 
     $result = $stmt->get_result();
+
+    sqlDisconnect();
+
     if ($row = $result->fetch_assoc()) {
         $fileCont = $row['document'];
         $fileName = $row['file_name'];
@@ -49,12 +52,13 @@ if (
         // header('Expires: 0');
         // readfile($file);
 
-        header("Content-Type: application/force-download");
-        header("Content-Disposition: attachment; filename=$fileName");
-        echo $fileCont;
-        
-        sqlDisconnect();
+        if (!$fileCont) {
+            pushFeedbackToLog("Nothing to download.", true);
+            redirectTo(ROOT, "document");
+        } else {
+            header("Content-Type: application/force-download");
+            header("Content-Disposition: attachment; filename=$fileName");
+            echo $fileCont;
+        }
     }
 }
-
-redirectTo(ROOT, "document_list");
