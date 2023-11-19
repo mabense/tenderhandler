@@ -68,7 +68,7 @@ function domSetTitle($pageTitle)
     global $dom;
     $contentTitle = $dom->getElementById("contentTitle");
     $contentTitle->textContent = $pageTitle;
-    $titleTag = ($dom->getElementsByTagName("title"))->item(0);
+    $titleTag = $dom->getElementsByTagName("title")->item(0);
     $titleTag->textContent .= " - " . $pageTitle;
 }
 
@@ -77,7 +77,7 @@ function domAddStyle($stylesheet)
 {
     $dom = new DOMDocument();
     global $dom;
-    $head = ($dom->getElementsByTagName("head"))->item(0);
+    $head = $dom->getElementsByTagName("head")->item(0);
     $cssLink = $dom->createElement("link");
     $cssLink->setAttribute("rel", "stylesheet");
     $cssLink->setAttribute("href", $stylesheet);

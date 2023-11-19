@@ -416,7 +416,7 @@ function sqlPrepareBindExecute($sql, $types, $params, $__FUNCTION__)
 
 function sqlConnect()
 {
-    $conn = new mysqli("127.0.0.1", "root", "", "tenderdb") or die("failed to establish sql connection");
+    $conn = new mysqli(DB_HOST, DB_USER, DB_JEL, DB_DB) or die("failed to establish sql connection");
     $conn->query("SET NAMES UTF-8");
     $conn->query("SET character_set_results=utf-8");
     $conn->set_charset("utf-8");
