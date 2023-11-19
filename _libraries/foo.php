@@ -22,3 +22,17 @@ function redirectTo($root, $pageRoute) {
 	header("Location: " . $root . findPage($pageRoute));
 	exit;
 }
+
+function fromGET($nameInGET) {
+	if(isset($_GET[$nameInGET])) {
+		return $_GET[$nameInGET];
+	}
+	return null;
+}
+
+function fromPOST($nameInPOST) {
+	if(isset($_POST[$nameInPOST])) {
+		return $_POST[$nameInPOST];
+	}
+	return null;
+}

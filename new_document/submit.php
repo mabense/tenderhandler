@@ -8,10 +8,10 @@ $page = PAGE;
 $tender = getTender();
 $ms = getMilestone();
 
-$req = $_POST["req"];
-$parti = $_POST["parti"];
-$submit_date = $_POST["submit_date"];
-$verify_date = $_POST["verify_date"];
+$req = fromPOST("req");
+$parti = fromPOST("parti");
+$submit_date = fromPOST("submit_date");
+$verify_date = fromPOST("verify_date");
 
 $result = false;
 

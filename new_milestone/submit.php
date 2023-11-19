@@ -7,9 +7,9 @@ $page = PAGE;
 
 $tender = getTender();
 
-$name = $_POST["name"];
-$date = $_POST["date"];
-$desc = $_POST["desc"];
+$name = fromPOST("name");
+$date = fromPOST("date");
+$desc = fromPOST("desc");
 
 $result = false;
 

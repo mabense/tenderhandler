@@ -5,13 +5,13 @@ haveSession();
 $user = getUserEmail();
 $page = PAGE;
 
-$code = $_POST["code"];
-$begin = $_POST["begin"];
-$end = $_POST["end"];
-$asked = $_POST["asked"];
-$granted = $_POST["granted"];
-$topic = $_POST["topic"];
-$manager = $_POST["manager"];
+$code = fromPOST("code");
+$begin = fromPOST("begin");
+$end = fromPOST("end");
+$asked = fromPOST("asked");
+$granted = fromPOST("granted");
+$topic = fromPOST("topic");
+$manager = fromPOST("manager");
 
 $result = false;
 

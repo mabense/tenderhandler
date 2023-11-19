@@ -8,6 +8,13 @@ function haveSession()
     }
 }
 
+function fromSESSION($nameInSESSION) {
+	if(isset($_SESSION[$nameInSESSION])) {
+		return $_SESSION[$nameInSESSION];
+	}
+	return null;
+}
+
 
 function auth($acceptGuest, $acceptManager, $acceptAdmin) {
     $isGuest = !getUserEmail();
@@ -28,17 +35,17 @@ function auth($acceptGuest, $acceptManager, $acceptAdmin) {
 
 function getUserEmail()
 {
-    return $_SESSION["uEmail"];
+    return fromSESSION("uEmail");
 }
 
 function getUserName()
 {
-    return $_SESSION["uName"];
+    return fromSESSION("uName");
 }
 
 function isUserAdmin()
 {
-    return $_SESSION["uAdmin"];
+    return fromSESSION("uAdmin");
 }
 
 function setUser($userEmail, $userName, $isAdmin)
@@ -65,10 +72,7 @@ function resetUser()
 
 function getTableAllKeys()
 {
-    if (!isset($_SESSION["tableAllKeys"])) {
-        return false;
-    }
-    return $_SESSION["tableAllKeys"];
+    return fromSESSION("tableAllKeys");
 }
 
 
@@ -87,10 +91,7 @@ function resetTableAllKeys()
 
 function getTender()
 {
-    if (!isset($_SESSION["tenderCode"])) {
-        return false;
-    }
-    return $_SESSION["tenderCode"];
+    return fromSESSION("tenderCode");
 }
 
 
@@ -109,10 +110,7 @@ function resetTender()
 
 function getMilestone()
 {
-    if (!isset($_SESSION["milestone"])) {
-        return false;
-    }
-    return $_SESSION["milestone"];
+    return fromSESSION("milestone");
 }
 
 
@@ -131,10 +129,7 @@ function resetMilestone()
 
 function getMilestoneTitle()
 {
-    if (!isset($_SESSION["ms_title"])) {
-        return false;
-    }
-    return $_SESSION["ms_title"];
+    return fromSESSION("ms_title");
 }
 
 
@@ -153,10 +148,7 @@ function resetMilestoneTitle()
 
 function getDocument()
 {
-    if (!isset($_SESSION["document"])) {
-        return false;
-    }
-    return $_SESSION["document"];
+    return fromSESSION("document");
 }
 
 
@@ -175,10 +167,7 @@ function resetDocument()
 
 // function getPage()
 // {
-//     if (!isset($_SESSION["page"])) {
-//         return false;
-//     }
-//     return $_SESSION["page"];
+//     return fromSESSION("page");
 // }
 
 

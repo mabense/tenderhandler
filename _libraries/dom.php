@@ -6,7 +6,7 @@ require_once(LIB_DIR . "feedback_log.php");
 function domHandleMissingPage()
 {
     haveSession();
-    $missingPage = $_GET["missing"];
+    $missingPage = fromGET("missing");
     if (isset($missingPage)) {
         pushFeedbackToLog("\"" . $missingPage . "\" not found.", true);
 
@@ -17,11 +17,11 @@ function domHandleMissingPage()
 function domHandleAction()
 {
     haveSession();
-    $action = $_GET["action"];
+    $action = fromGET("action");
     if (isset($action)) {
         $actionPath = "./" . $action . ".php";
         if (file_exists($actionPath)) {
-            require_once($actionPath);
+            include_once($actionPath);
             pushFeedbackToLog("\"" . $action . "\" failed.", true);
 
             redirectTo(ROOT, PAGE);

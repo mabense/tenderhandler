@@ -306,17 +306,18 @@ function sqlLogin($email, $password)
 {
     $fields = "`email`, `password`, `name`, `is_admin`";
     $sql = "SELECT $fields FROM USER WHERE `email`=?";
+    // pushFeedbackToLog($sql);
+    // pushFeedbackToLog(__FUNCTION__);
     $stmt = sqlPrepareBindExecute(
         $sql,
         "s",
         [$email],
         __FUNCTION__
     );
-    $result = $stmt->get_result();
-    $user = $result->fetch_assoc();
+    $user = $stmt ? $stmt->get_result()->fetch_assoc() : null;
 
     $uExists = ($user !== null);
-    $pwdMatch = password_verify($password, $user["password"]);
+    $pwdMatch = $uExists ? password_verify($password, $user["password"]) : false;
     if (!$uExists || !$pwdMatch) {
         pushFeedbackToLog("Incorrect email address or password.", true);
         return false;
@@ -332,6 +333,7 @@ function sqlLogin($email, $password)
     );
 
     return ($uExists && $pwdMatch && $stmt2) ? $user : false;
+    // return false;
 }
 
 
@@ -393,14 +395,16 @@ function sqlPrepareBindExecute($sql, $types, $params, $__FUNCTION__)
     if (!sqlConnFound($__FUNCTION__)) {
         return false;
     }
-    $stmt = $conn->prepare($sql);
-    // array_push($params, "HIBA");
-    $stmt->bind_param($types, ...$params);
-    if (!$stmt->execute()) {
-        pushFeedbackToLog($__FUNCTION__ . ": " . $stmt->error, true);
-        return false;
+    if ($stmt = $conn->prepare($sql)) {
+        // array_push($params, "HIBA");
+        $stmt->bind_param($types, ...$params);
+        if (!$stmt->execute()) {
+            pushFeedbackToLog($__FUNCTION__ . ": " . $stmt->error, true);
+            return false;
+        }
+        return $stmt;
     }
-    return $stmt;
+    return false;
 }
 
 
@@ -414,7 +418,6 @@ function sqlConnect()
     $conn->query("SET NAMES UTF-8");
     $conn->query("SET character_set_results=utf-8");
     $conn->set_charset("utf-8");
-    
 }
 
 

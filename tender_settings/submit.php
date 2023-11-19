@@ -7,7 +7,7 @@ $user = false;
 $page = PAGE;
 
 $code = getTender();
-$manager = $_POST["manager"];
+$manager = fromPOST("manager");
 
 $result = false;
 

@@ -100,4 +100,5 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     domPopFeedback();
 }
 
+global $dom;
 echo $dom->saveHTML();

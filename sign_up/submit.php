@@ -5,10 +5,10 @@ haveSession();
 $user = false;
 $page = PAGE;
 
-$email = $_POST["user"];
-$pwd = $_POST["pwd"];
-$repwd = $_POST["repwd"];
-$name = $_POST["name"];
+$email = fromPOST("user");
+$pwd = fromPOST("pwd");
+$repwd = fromPOST("repwd");
+$name = fromPOST("name");
 
 if (
     isset($email)

@@ -5,8 +5,8 @@ haveSession();
 $user = false;
 $page = PAGE;
 
-$email = $_POST["user"];
-$pwd = $_POST["pwd"];
+$email = fromPOST("user");
+$pwd = fromPOST("pwd");
 
 if (
     isset($email)

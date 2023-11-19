@@ -3,7 +3,11 @@
 
 function isThereFeedback()
 {
-    return (is_array($_SESSION["log"]) && sizeof($_SESSION["log"]) > 0);
+    $log = fromSESSION("log");
+    if (isset($log)) {
+        return (is_array($log) && sizeof($log) > 0);
+    }
+    return false;
 }
 
 

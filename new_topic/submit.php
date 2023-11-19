@@ -5,8 +5,8 @@ haveSession();
 $user = false;
 $page = PAGE;
 
-$title = $_POST["title"];
-$purpose = $_POST["purpose"];
+$title = fromPOST("title");
+$purpose = fromPOST("purpose");
 
 $result = false;
 
