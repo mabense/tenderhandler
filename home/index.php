@@ -16,8 +16,7 @@ domHandleMissingPage();
 
 domHandleAction();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domMakeToolbarLoggedIn();
 

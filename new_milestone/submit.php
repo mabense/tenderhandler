@@ -18,7 +18,7 @@ if (
     && isset($date)
     && isset($desc)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
     /* */
     $result = sqlNewMilestone($tender, $name, $date, $desc);
     /*/

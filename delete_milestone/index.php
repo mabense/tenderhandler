@@ -20,7 +20,7 @@ $tenderCode = getTender();
 $msCode = getMilestone();
 
 if (isset($tenderCode) && isset($msCode)) {
-    $conn = sqlConnect();
+    sqlConnect();
 
     $msStmt = sqlPrepareBindExecute(
         "SELECT COUNT(`document`) AS uploaded FROM DOCUMENT WHERE `tender`=? AND `milestone`=?",

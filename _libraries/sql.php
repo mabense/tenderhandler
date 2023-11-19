@@ -90,7 +90,6 @@ function sqlQueryContentParam(
     $keyAttributes = [],
     $isSpecialMS = false
 ) {
-    $dom = new DOMDocument();
     global $dom;
     $contentTag = $dom->getElementById("content");
 
@@ -110,7 +109,6 @@ function sqlQueryContentParam(
 
 function sqlQueryContent($sql, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [])
 {
-    $dom = new DOMDocument();
     global $dom;
     $contentTag = $dom->getElementById("content");
     /* */
@@ -132,7 +130,6 @@ function sqlQueryContent($sql, $tabelColumns = [], $onClickRoute = "", $keyAttri
 
 function sqlQueryTable($sqlResult, $tabelColumns = [], $onClickRoute = "", $keyAttributes = [], $isSpecialMS = false)
 {
-    $dom = new DOMDocument();
     global $dom;
     $tableTag = $dom->getElementById("contentTable");
 
@@ -173,7 +170,6 @@ function sqlQueryTable($sqlResult, $tabelColumns = [], $onClickRoute = "", $keyA
 
 function sqlQueryTableHead($tabelColumns)
 {
-    $dom = new DOMDocument();
     global $dom;
     $tableHead = $dom->createElement("thead");
 
@@ -190,7 +186,6 @@ function sqlQueryTableHead($tabelColumns)
 
 function sqlQueryTableEmptyRow($columnCount)
 {
-    $dom = new DOMDocument();
     global $dom;
     $tr = $dom->createElement("tr");
     $tr->setAttribute(
@@ -208,7 +203,6 @@ function sqlQueryTableEmptyRow($columnCount)
 
 function sqlQueryMilestoneRow($sqlResultRow, $onClickRoute, $rowIndex = 0)
 {
-    $dom = new DOMDocument();
     global $dom;
     $trRoute = ($onClickRoute == "")
         ? "./"
@@ -247,7 +241,6 @@ function sqlQueryMilestoneRow($sqlResultRow, $onClickRoute, $rowIndex = 0)
 
 function sqlQueryTableRow($sqlResultRow, $onClickRoute, $rowIndex)
 {
-    $dom = new DOMDocument();
     global $dom;
     $trRoute = ($onClickRoute == "")
         ? "./"
@@ -416,11 +409,12 @@ function sqlPrepareBindExecute($sql, $types, $params, $__FUNCTION__)
 
 function sqlConnect()
 {
-    $conn = new mysqli(DB_HOST, DB_USER, DB_JEL, DB_DB) or die("failed to establish sql connection");
+    $GLOBALS["conn"] = new mysqli(DB_HOST, DB_USER, DB_JEL, DB_DB) or die("failed to establish sql connection");
+    global $conn;
     $conn->query("SET NAMES UTF-8");
     $conn->query("SET character_set_results=utf-8");
     $conn->set_charset("utf-8");
-    return $conn;
+    
 }
 
 

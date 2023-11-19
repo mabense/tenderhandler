@@ -25,7 +25,7 @@ if (
     && isset($topic)
     && isset($manager)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
     $result = sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager) 
     && sqlPrepareBindExecute(
         "INSERT INTO ADMIN (`admin`, `tender`) VALUES (?, ?)", 

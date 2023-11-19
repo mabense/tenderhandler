@@ -19,14 +19,13 @@ domHandleAction();
 
 $doc = getDocument();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domMakeToolbarLoggedIn();
 
     domAppendTemplateTo("content", "./view.htm");
 
-    // $conn = sqlConnect();
+    // sqlConnect();
 
     // sqlDisconnect();
     

@@ -12,7 +12,7 @@ if (
     isset($email)
     && isset($pwd)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
     $user = sqlLogin($email, $pwd);
     sqlDisconnect();
 }

@@ -17,7 +17,7 @@ $user = getUserEmail();
 $page = "home";
 
 if ($user != false) {
-    $conn = sqlConnect();
+    sqlConnect();
     $out = sqlLogout($user);
     sqlDisconnect();
     if ($out) {

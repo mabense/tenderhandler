@@ -17,14 +17,13 @@ domHandleMissingPage();
 
 domHandleAction();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domMakeToolbarLoggedIn();
 
     domAppendTemplateTo("content", "./view.htm");
 
-    $conn = sqlConnect();
+    sqlConnect();
 
     // Fill Manager Select
     $manSelect = $dom->getElementById("manager");

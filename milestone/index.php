@@ -32,8 +32,7 @@ $milestoneData = [
     "progress" => $placeholder
 ];
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
 
@@ -42,7 +41,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
     if ($tenderCode && $msCode) {
-        $conn = sqlConnect();
+        sqlConnect();
 
         $milestoneData["tender"] = $tenderCode;
         $milestoneData["number"] = $msCode;

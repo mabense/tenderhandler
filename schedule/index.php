@@ -17,8 +17,7 @@ domHandleMissingPage();
 
 domHandleAction();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
     // domAddStyle(STYLE_DIR . "query_page.css");
@@ -32,7 +31,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     $sql = "SELECT YEAR(`date`) AS year, MONTH(`date`) AS month, COUNT(`number`) AS due 
     FROM MILESTONE GROUP BY year, month";
 
-    $conn = sqlConnect();
+    sqlConnect();
     sqlQueryContent(
         $sql,
         [

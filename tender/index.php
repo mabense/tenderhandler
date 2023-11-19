@@ -34,8 +34,7 @@ $tenderData = [
     "topic_purpose" => $placeholder
 ];
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
 
@@ -44,7 +43,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
     if ($tenderCode) {
-        $conn = sqlConnect();
+        sqlConnect();
 
         $tenderData["code"] = $tenderCode;
         $page = $tenderCode;

@@ -35,8 +35,7 @@ $docData = [
     "deadline_verify" => $placeholder
 ];
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
 
@@ -45,7 +44,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
     if ($tenderCode && $msCode && $docReq) {
-        $conn = sqlConnect();
+        sqlConnect();
 
         $docData["tender"] = $tenderCode;
         $docData["milestone"] = $msCode;

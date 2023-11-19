@@ -17,8 +17,7 @@ domHandleMissingPage();
 
 domHandleAction();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
     // domAddStyle(STYLE_DIR . "query_page.css");
@@ -32,7 +31,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
         "FROM TENDER LEFT JOIN USER ON TENDER.`manager`=USER.`email` " .
         "GROUP BY email";
 
-    $conn = sqlConnect();
+    sqlConnect();
     sqlQueryContent(
         $sql,
         [

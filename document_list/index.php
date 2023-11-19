@@ -20,8 +20,7 @@ domHandleMissingPage();
 
 domHandleAction();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
     // domAddStyle(STYLE_DIR . "query_page.css");
@@ -30,7 +29,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    $conn = sqlConnect();
+    sqlConnect();
     $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
     // $sql = "";
     sqlQueryContentParam(

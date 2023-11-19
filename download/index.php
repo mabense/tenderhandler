@@ -26,7 +26,7 @@ if (
     isset($ms) &&
     isset($doc)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
 
     $sql = "SELECT `document`, `file_name` FROM DOCUMENT WHERE `tender`=? AND `milestone`=? AND `requirement`=?";
     $stmt = sqlPrepareBindExecute(

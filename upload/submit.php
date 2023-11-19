@@ -33,8 +33,8 @@ if ((count($_FILES) > 0) && (is_uploaded_file($_FILES['docfile']['tmp_name']))) 
             true
         );
     } else {
-        // $conn = sqlConnect();
-        $GLOBALS["conn"] = sqlConnect();
+        // sqlConnect();
+        sqlConnect();
         global $conn;
 
         $sql = "UPDATE DOCUMENT SET `document`=?, `file_name`=? WHERE `tender`=? AND `milestone`=? AND `requirement`=?";

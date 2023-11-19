@@ -21,7 +21,7 @@ if (
     && isset($submit_date)
     && isset($verify_date)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
     $result = sqlNewDocument($tender, $ms, $req, $parti, $submit_date, $verify_date);
     sqlDisconnect();
 }

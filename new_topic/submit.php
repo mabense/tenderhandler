@@ -14,7 +14,7 @@ if (
     isset($title)
     && isset($purpose)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
     $result = sqlNewTopic($title, $purpose);
     sqlDisconnect();
 }

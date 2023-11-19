@@ -16,7 +16,7 @@ if (
     && isset($repwd)
     && isset($name)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
     $result = sqlSignup($email, $pwd, $repwd, $name, false);
     sqlDisconnect();
 }

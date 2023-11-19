@@ -19,8 +19,7 @@ domHandleMissingPage();
 
 domHandleAction();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
     // domAddStyle(STYLE_DIR . "query_page.css");
@@ -39,7 +38,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     )
     GROUP BY `tender`, `milestone`;";
 
-    $conn = sqlConnect();
+    sqlConnect();
     sqlQueryContentParam(
         $sql,
         "s",

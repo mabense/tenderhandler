@@ -15,7 +15,7 @@ if (
     isset($code)
     && isset($manager)
 ) {
-    $GLOBALS["conn"] = sqlConnect();
+    sqlConnect();
     $result = sqlPrepareBindExecute(
         "UPDATE TENDER SET `manager`=? WHERE `code`=?", 
         "ss", 

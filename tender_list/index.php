@@ -17,8 +17,7 @@ domHandleMissingPage();
 
 domHandleAction();
 
-$dom = new DOMDocument();
-if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
+if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAddStyle("../_styles/query_page.css");
     // domAddStyle(STYLE_DIR . "query_page.css");
@@ -28,7 +27,7 @@ if ($dom->loadHTMLFile(BASE_TEMPLATE)) {
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
     $fields = "`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`";
-    $conn = sqlConnect();
+    sqlConnect();
     sqlQueryContent(
         "SELECT $fields FROM TENDER", 
         [

@@ -62,32 +62,51 @@ function domHandleTableRow()
 }
 
 
+function newDOMDocument($baseTemplatePath)
+{
+    $GLOBALS["dom"] = new DOMDocument();
+    global $dom;
+    libxml_use_internal_errors(true);
+    return $dom->loadHTMLFile($baseTemplatePath);
+}
+
+
+function domGetElementByTagName($name)
+{
+    global $dom;
+    if ($list = $dom->getElementsByTagName($name)) {
+        return $list->item(0);
+    }
+    return false;
+}
+
+
 function domSetTitle($pageTitle)
 {
-    $dom = new DOMDocument();
     global $dom;
-    $contentTitle = $dom->getElementById("contentTitle");
-    $contentTitle->textContent = $pageTitle;
-    $titleTag = $dom->getElementsByTagName("title")->item(0);
-    $titleTag->textContent .= " - " . $pageTitle;
+    if ($contentTitle = $dom->getElementById("contentTitle")) {
+        $contentTitle->textContent = $pageTitle;
+    }
+    if ($titleTag = domGetElementByTagName("title")) {
+        $titleTag->textContent .= " - " . $pageTitle;
+    }
 }
 
 
 function domAddStyle($stylesheet)
 {
-    $dom = new DOMDocument();
     global $dom;
-    $head = $dom->getElementsByTagName("head")->item(0);
-    $cssLink = $dom->createElement("link");
-    $cssLink->setAttribute("rel", "stylesheet");
-    $cssLink->setAttribute("href", $stylesheet);
-    $head->appendChild($cssLink);
+    if ($head = domGetElementByTagName("head")) {
+        $cssLink = $dom->createElement("link");
+        $cssLink->setAttribute("rel", "stylesheet");
+        $cssLink->setAttribute("href", $stylesheet);
+        $head->appendChild($cssLink);
+    }
 }
 
 
 function domMakeToolbar($pages)
 {
-    $dom = new DOMDocument();
     global $dom;
     if (is_array($pages)) {
         $toolbar = $dom->getElementById("toolbar");
@@ -123,7 +142,6 @@ function domMakeToolbarLoggedIn()
 
 function domContentTableFrom($assocArray)
 {
-    $dom = new DOMDocument();
     global $dom;
     $table = $dom->getElementById("contentTable");
     // $table = $dom->createElement("table");
@@ -149,7 +167,6 @@ function domContentTableFrom($assocArray)
 
 function domAppendTemplateTo($elementID, $template, $clear = false)
 {
-    $dom = new DOMDocument();
     global $dom;
     $element = $dom->getElementById($elementID);
     $tmpNode = new DOMDocument();
@@ -166,7 +183,6 @@ function domAppendTemplateTo($elementID, $template, $clear = false)
 
 function domPopFeedback()
 {
-    $dom = new DOMDocument();
     global $dom;
     $feedback = getFeedbackLog();
     resetFeedbackLog();
