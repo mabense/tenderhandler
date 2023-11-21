@@ -26,10 +26,10 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    // $sql = "SELECT * FROM MILESTONE";
-    // $sql = "SELECT `date`, `number` FROM MILESTONE";
+    // $sql = "SELECT * FROM milestone";
+    // $sql = "SELECT `date`, `number` FROM milestone";
     $sql = "SELECT YEAR(`date`) AS year, MONTH(`date`) AS month, COUNT(`number`) AS due 
-    FROM MILESTONE GROUP BY year, month";
+    FROM milestone GROUP BY year, month";
 
     sqlConnect();
     sqlQueryContent(

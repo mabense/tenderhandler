@@ -32,9 +32,9 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     SUM(NOT ISNULL(`document`)) AS files, SUM(NOT ISNULL(`requirement`)) AS reqs, 
     SUM(`sum_paid`) AS paid
     FROM (
-        (SELECT `tender`, `number` AS milestone, `name`, `date` FROM MILESTONE WHERE `tender`=?) AS MS 
+        (SELECT `tender`, `number` AS milestone, `name`, `date` FROM milestone WHERE `tender`=?) AS MS 
         NATURAL LEFT JOIN 
-        (SELECT `tender`, `milestone`, `document`, `requirement`, `sum_paid` FROM DOCUMENT) AS DOC
+        (SELECT `tender`, `milestone`, `document`, `requirement`, `sum_paid` FROM document) AS DOC
     )
     GROUP BY `tender`, `milestone`;";
 

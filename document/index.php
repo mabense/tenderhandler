@@ -52,7 +52,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
         $page = getMilestoneTitle() . " - " . $docReq;
         $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
         $docStmt = sqlPrepareBindExecute(
-            "SELECT $fields FROM DOCUMENT WHERE `tender`=? AND `milestone`=? AND `requirement`=?",
+            "SELECT $fields FROM document WHERE `tender`=? AND `milestone`=? AND `requirement`=?",
             "sis",
             [$tenderCode, $msCode, $docReq],
             __FUNCTION__

@@ -28,7 +28,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     // Fill Manager Select
     $manSelect = $dom->getElementById("manager");
     $stmt = sqlPrepareExecute(
-        "SELECT `email`, `name` FROM USER WHERE `is_admin`=FALSE", 
+        "SELECT `email`, `name` FROM user WHERE `is_admin`=FALSE", 
         __FUNCTION__
     );
     $manResult = $stmt->get_result();

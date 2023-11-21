@@ -48,7 +48,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
         $tenderData["code"] = $tenderCode;
         $page = $tenderCode;
         $tenderStmt = sqlPrepareBindExecute(
-            "SELECT * FROM TENDER WHERE `code`=?",
+            "SELECT * FROM tender WHERE `code`=?",
             "s",
             [$tenderCode],
             __FUNCTION__
@@ -64,7 +64,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
             $managerID = $tender["manager"];
             $managerStmt = sqlPrepareBindExecute(
-                "SELECT `name` FROM USER WHERE `email`=?",
+                "SELECT `name` FROM user WHERE `email`=?",
                 "s",
                 [$managerID],
                 __FUNCTION__
@@ -77,7 +77,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
             $topic_id = $tender["topic_id"];
             $topicStmt = sqlPrepareBindExecute(
-                "SELECT `title`, `purpose` FROM TOPIC WHERE `id`=?",
+                "SELECT `title`, `purpose` FROM topic WHERE `id`=?",
                 "i",
                 [$topic_id],
                 __FUNCTION__

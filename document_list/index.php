@@ -33,7 +33,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
     // $sql = "";
     sqlQueryContentParam(
-        "SELECT $fields FROM DOCUMENT WHERE `tender`=? AND  `milestone`=?",
+        "SELECT $fields FROM document WHERE `tender`=? AND  `milestone`=?",
         "si",
         [$tenderCode, $msCode],
         [

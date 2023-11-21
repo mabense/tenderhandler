@@ -28,7 +28,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     // Fill Topic Select
     $topicSelect = $dom->getElementById("topic");
     $stmt = sqlPrepareExecute(
-        "SELECT `id`, `title` FROM TOPIC", 
+        "SELECT `id`, `title` FROM topic", 
         __FUNCTION__
     );
     $topicResult = $stmt->get_result();
@@ -49,7 +49,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     // Fill Manager Select
     $manSelect = $dom->getElementById("manager");
     $stmt = sqlPrepareExecute(
-        "SELECT `email`, `name` FROM USER WHERE `is_admin`=FALSE", 
+        "SELECT `email`, `name` FROM user WHERE `is_admin`=FALSE", 
         __FUNCTION__
     );
     $manResult = $stmt->get_result();

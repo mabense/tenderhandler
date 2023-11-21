@@ -47,7 +47,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
         $milestoneData["number"] = $msCode;
         $page = $tenderCode . ": " . $msCode . ". Milestone";
         $msStmt = sqlPrepareBindExecute(
-            "SELECT * FROM MILESTONE WHERE `tender`=? AND `number`=?",
+            "SELECT * FROM milestone WHERE `tender`=? AND `number`=?",
             "si",
             [$tenderCode, $msCode],
             __FUNCTION__
@@ -61,7 +61,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
             $milestoneData["progress"] = $milestone["progress"];
 
             $tenderStmt = sqlPrepareBindExecute(
-                "SELECT `topic_id` FROM TENDER WHERE `code`=?",
+                "SELECT `topic_id` FROM tender WHERE `code`=?",
                 "s",
                 [$tenderCode],
                 __FUNCTION__
@@ -71,7 +71,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
             if ($tender) {
                 $topic_id = $tender["topic_id"];
                 $topicStmt = sqlPrepareBindExecute(
-                    "SELECT `title` FROM TOPIC WHERE `id`=?",
+                    "SELECT `title` FROM topic WHERE `id`=?",
                     "i",
                     [$topic_id],
                     __FUNCTION__

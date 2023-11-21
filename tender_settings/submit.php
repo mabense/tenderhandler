@@ -17,7 +17,7 @@ if (
 ) {
     sqlConnect();
     $result = sqlPrepareBindExecute(
-        "UPDATE TENDER SET `manager`=? WHERE `code`=?", 
+        "UPDATE tender SET `manager`=? WHERE `code`=?", 
         "ss", 
         [$manager, $code], 
         __FUNCTION__

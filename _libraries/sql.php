@@ -7,7 +7,7 @@
 function sqlNewTopic($title, $purpose)
 {
     $fields = "(`title`, `purpose`)";
-    $sql = "INSERT INTO TOPIC $fields VALUES (?, ?)";
+    $sql = "INSERT INTO topic $fields VALUES (?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
         "ss",
@@ -21,7 +21,7 @@ function sqlNewTopic($title, $purpose)
 function sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager)
 {
     $fields = "(`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `topic_id`, `manager`)";
-    $sql = "INSERT INTO TENDER $fields VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO tender $fields VALUES (?, ?, ?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
         "sssiiis",
@@ -36,7 +36,7 @@ function sqlNewMilestone($tender, $name, $date, $description)
 {
     $number = 1;
     $numStmt = sqlPrepareBindExecute(
-        "SELECT MAX(`number`) AS max FROM MILESTONE WHERE `tender`=?",
+        "SELECT MAX(`number`) AS max FROM milestone WHERE `tender`=?",
         "s",
         [$tender],
         __FUNCTION__
@@ -46,7 +46,7 @@ function sqlNewMilestone($tender, $name, $date, $description)
         $number = $numRow["max"] + 1;
     }
     $fields = "(`tender`, `number`, `name`, `date`, `description`)";
-    $sql = "INSERT INTO MILESTONE $fields VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO milestone $fields VALUES (?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
         "sisss",
@@ -60,7 +60,7 @@ function sqlNewMilestone($tender, $name, $date, $description)
 function sqlNewDocument($tender, $ms, $req, $parti, $submit_date, $verify_date)
 {
     $fields = "(`tender`, `milestone`, `requirement`, `participant`, `deadline_submit`, `deadline_verify`)";
-    $sql = "INSERT INTO DOCUMENT $fields VALUES (?, ?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO document $fields VALUES (?, ?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
         "sissss",
@@ -206,7 +206,7 @@ function sqlQueryMilestoneRow($sqlResultRow, $onClickRoute, $rowIndex = 0)
     global $dom;
     $trRoute = ($onClickRoute == "")
         ? "./"
-        : "../" . findPage($onClickRoute) . "/?row=" . $rowIndex;
+        : "../" . findPage($onClickRoute) . "/index.php?row=" . $rowIndex;
 
     $tr = $dom->createElement("tr");
     $tr->setAttribute(
@@ -244,7 +244,7 @@ function sqlQueryTableRow($sqlResultRow, $onClickRoute, $rowIndex)
     global $dom;
     $trRoute = ($onClickRoute == "")
         ? "./"
-        : "../" . findPage($onClickRoute) . "/?row=" . $rowIndex;
+        : "../" . findPage($onClickRoute) . "/index.php?row=" . $rowIndex;
 
     $tr = $dom->createElement("tr");
     $tr->setAttribute(
@@ -287,7 +287,7 @@ function passwordCompare($one, $other)
 function sqlLogout($email)
 {
     $changes = "`now_active`=FALSE, `last_active`=CURRENT_DATE";
-    $setInactive = "UPDATE USER SET $changes WHERE `email`=?";
+    $setInactive = "UPDATE user SET $changes WHERE `email`=?";
     $success = sqlPrepareBindExecute(
         $setInactive,
         "s",
@@ -305,7 +305,7 @@ function sqlLogout($email)
 function sqlLogin($email, $password)
 {
     $fields = "`email`, `password`, `name`, `is_admin`";
-    $sql = "SELECT $fields FROM USER WHERE `email`=?";
+    $sql = "SELECT $fields FROM user WHERE `email`=?";
     // pushFeedbackToLog($sql);
     // pushFeedbackToLog(__FUNCTION__);
     $stmt = sqlPrepareBindExecute(
@@ -315,22 +315,32 @@ function sqlLogin($email, $password)
         __FUNCTION__
     );
     $user = $stmt ? $stmt->get_result()->fetch_assoc() : null;
+    // $user = $stmt->get_result()->fetch_assoc();
+    // $stmt->store_result();
 
     $uExists = ($user !== null);
     $pwdMatch = $uExists ? password_verify($password, $user["password"]) : false;
+
+    // pushFeedbackToLog($sql);
+    // pushFeedbackToLog($user . " \"" . $email . "\" \"" . $password . "\"");
+    // pushFeedbackToLog("uE = " . ($uExists ? "+" : "-"));
+    // pushFeedbackToLog("pM = " . ($pwdMatch ? "+" : "-"));
+
     if (!$uExists || !$pwdMatch) {
         pushFeedbackToLog("Incorrect email address or password.", true);
         return false;
     }
 
     $changes = "`now_active`=TRUE, `last_active`=CURRENT_DATE";
-    $setActive = "UPDATE USER SET $changes WHERE `email`=?";
+    $setActive = "UPDATE user SET $changes WHERE `email`=?";
     $stmt2 = sqlPrepareBindExecute(
         $setActive,
         "s",
         [$email],
         __FUNCTION__
     );
+    
+    // pushFeedbackToLog($setActive);
 
     return ($uExists && $pwdMatch && $stmt2) ? $user : false;
     // return false;
@@ -349,7 +359,7 @@ function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
     }
     $password = password_hash($password, PASSWORD_BCRYPT);
     $fields = "(`email`, `password`, `name`, `is_admin`)";
-    $sql = "INSERT INTO USER $fields VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO user $fields VALUES (?, ?, ?, ?)";
     $stmt = sqlPrepareBindExecute(
         $sql,
         "sssi",
@@ -455,9 +465,9 @@ function _sqlTest()
 {
     global $conn;
     /* */
-    $sql = "SELECT * FROM USER";
+    $sql = "SELECT * FROM user";
     /*/
-    $sql = "SELECT * FROM USER WHERE `name`='Kis Pista'";
+    $sql = "SELECT * FROM user WHERE `name`='Kis Pista'";
     /* */
     $stmt = $conn->prepare($sql);
     $stmt->execute();

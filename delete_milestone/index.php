@@ -23,7 +23,7 @@ if (isset($tenderCode) && isset($msCode)) {
     sqlConnect();
 
     $msStmt = sqlPrepareBindExecute(
-        "SELECT COUNT(`document`) AS uploaded FROM DOCUMENT WHERE `tender`=? AND `milestone`=?",
+        "SELECT COUNT(`document`) AS uploaded FROM document WHERE `tender`=? AND `milestone`=?",
         "si",
         [$tenderCode, $msCode],
         __FUNCTION__
@@ -35,7 +35,7 @@ if (isset($tenderCode) && isset($msCode)) {
         pushFeedbackToLog("Can't delete milestone as $uploads files have already been uploaded!", true);
     } else {
         $delStmt = sqlPrepareBindExecute(
-            "DELETE FROM MILESTONE WHERE `tender`=? AND `number`=?",
+            "DELETE FROM milestone WHERE `tender`=? AND `number`=?",
             "si",
             [$tenderCode, $msCode],
             __FUNCTION__

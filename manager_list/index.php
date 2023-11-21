@@ -26,9 +26,9 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    // $sql = "SELECT `email`, `name`, `now_active`, `last_active` FROM USER WHERE `is_admin`=FALSE";
-    $sql = "SELECT USER.`name` AS name, TENDER.`manager` AS email, COUNT(TENDER.`code`) AS projects " .
-        "FROM TENDER LEFT JOIN USER ON TENDER.`manager`=USER.`email` " .
+    // $sql = "SELECT `email`, `name`, `now_active`, `last_active` FROM user WHERE `is_admin`=FALSE";
+    $sql = "SELECT user.`name` AS name, tender.`manager` AS email, COUNT(tender.`code`) AS projects " .
+        "FROM tender LEFT JOIN user ON tender.`manager`=user.`email` " .
         "GROUP BY email";
 
     sqlConnect();

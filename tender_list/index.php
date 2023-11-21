@@ -29,7 +29,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     $fields = "`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`";
     sqlConnect();
     sqlQueryContent(
-        "SELECT $fields FROM TENDER", 
+        "SELECT $fields FROM tender", 
         [
             "code", 
             "begins", 

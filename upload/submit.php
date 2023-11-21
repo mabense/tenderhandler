@@ -37,7 +37,7 @@ if ((count($_FILES) > 0) && (is_uploaded_file($_FILES['docfile']['tmp_name']))) 
         sqlConnect();
         global $conn;
 
-        $sql = "UPDATE DOCUMENT SET `document`=?, `file_name`=? WHERE `tender`=? AND `milestone`=? AND `requirement`=?";
+        $sql = "UPDATE document SET `document`=?, `file_name`=? WHERE `tender`=? AND `milestone`=? AND `requirement`=?";
 
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('bssis', $file, $fileName, $tender, $ms, $doc);
