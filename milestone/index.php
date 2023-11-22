@@ -58,7 +58,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
             $milestoneData["name"] = $milestone["name"];
             $milestoneData["date"] = $milestone["date"];
             $milestoneData["description"] = $milestone["description"];
-            $milestoneData["progress"] = $milestone["progress"];
+            $milestoneData["progress"] = $milestone["progress"] . "%";
 
             $tenderStmt = sqlPrepareBindExecute(
                 "SELECT `topic_id` FROM tender WHERE `code`=?",

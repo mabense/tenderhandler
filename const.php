@@ -31,7 +31,14 @@ define(
 
 define("DEFAULT_PAGE", "home");
 
-// Misc
+// Config
 
 define("MAX_FILE_COUNT", 10);
 
+// Document states
+
+define("DOCUMENT_CREATED", "no");
+define("DOCUMENT_UPLOADED", "yes");
+define("DOCUMENT_REJECTED", "in_part");
+define("DOCUMENT_ACCEPTED", "yes");
+define("DOCUMENT_DELETED", "no");

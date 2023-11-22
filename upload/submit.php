@@ -39,14 +39,17 @@ if ((count($_FILES) > 0) && (is_uploaded_file($_FILES['docfile']['tmp_name']))) 
 
         sqlDeleteDocsKeepLatestN(MAX_FILE_COUNT - 1);
 
-        $changes = "`document`=?, `file_name`=?, `upload_time`=CURRENT_TIMESTAMP(6)";
+        $changes = "`document`=?, `file_name`=?, `upload_time`=CURRENT_TIMESTAMP(6), `fulfilled`=?";
+        $status = DOCUMENT_UPLOADED;
         $conditions = "`tender`=? AND `milestone`=? AND `requirement`=?";
         $sql = "UPDATE document SET $changes WHERE $conditions";
 
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param('bssis', $file, $fileName, $tender, $ms, $doc);
+        $stmt->bind_param('bsssis', $file, $fileName, $status, $tender, $ms, $doc);
         $stmt->send_long_data(0, $file);
         $success = $stmt->execute();
+
+        sqlUpdateMilestoneProgress($tender, $ms);
 
         sqlDisconnect();
     }
