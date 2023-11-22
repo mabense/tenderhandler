@@ -335,7 +335,7 @@ function sqlQueryMilestoneRow($sqlResultRow, $onClickRoute, $rowIndex = 0)
     $tr->appendChild($td_progress);
 
     $td_founds = $dom->createElement("td");
-    $td_founds->textContent = $sqlResultRow["paid"];
+    $td_founds->textContent = (isset($sqlResultRow["paid"]) ? $sqlResultRow["paid"] : 0);
     $tr->appendChild($td_founds);
 
     return $tr;
@@ -527,9 +527,9 @@ function sqlConnect()
 {
     $GLOBALS["conn"] = new mysqli(DB_HOST, DB_USER, DB_JEL, DB_DB) or die("failed to establish sql connection");
     global $conn;
-    $conn->query("SET NAMES UTF-8");
-    $conn->query("SET character_set_results=utf-8");
-    $conn->set_charset("utf-8");
+    $conn->query("SET NAMES utf8");
+    $conn->query("SET character_set_results=utf8");
+    $conn->set_charset("utf8");
 }
 
 

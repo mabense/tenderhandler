@@ -37,7 +37,7 @@ function domHandleAction()
 function domHandleTableRow()
 {
     haveSession();
-    $rowIndex = $_GET["row"];
+    $rowIndex = fromGET("row");
     if (isset($rowIndex)) {
         $allKeys = getTableAllKeys();
         $keys = $allKeys[$rowIndex];
