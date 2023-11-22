@@ -30,3 +30,8 @@ define(
 // Pages
 
 define("DEFAULT_PAGE", "home");
+
+// Misc
+
+define("MAX_FILE_COUNT", 10);
+

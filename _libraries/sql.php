@@ -1,6 +1,27 @@
 <?php
 
 
+function sqlDeleteDocsKeepLatestN($N) {
+    $deleteAll = "UPDATE document 
+    SET `document`=NULL, `file_name`=NULL, `upload_time`=NULL
+    WHERE `upload_id` NOT IN (
+        SELECT `upload_id`
+        FROM (
+            SELECT `upload_id`, `upload_time` 
+            FROM document 
+            HAVING `upload_time`
+            ORDER BY `upload_time` DESC 
+            LIMIT $N
+        ) AS latest_uploads
+    )";
+    $success = sqlPrepareExecute(
+        $deleteAll, 
+        __FUNCTION__
+    );
+    return $success;
+}
+
+
 // Tender
 
 

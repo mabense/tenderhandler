@@ -37,7 +37,11 @@ if ((count($_FILES) > 0) && (is_uploaded_file($_FILES['docfile']['tmp_name']))) 
         sqlConnect();
         global $conn;
 
-        $sql = "UPDATE document SET `document`=?, `file_name`=? WHERE `tender`=? AND `milestone`=? AND `requirement`=?";
+        sqlDeleteDocsKeepLatestN(MAX_FILE_COUNT - 1);
+
+        $changes = "`document`=?, `file_name`=?, `upload_time`=CURRENT_TIMESTAMP(6)";
+        $conditions = "`tender`=? AND `milestone`=? AND `requirement`=?";
+        $sql = "UPDATE document SET $changes WHERE $conditions";
 
         $stmt = $conn->prepare($sql);
         $stmt->bind_param('bssis', $file, $fileName, $tender, $ms, $doc);

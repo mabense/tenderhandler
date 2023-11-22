@@ -25,9 +25,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", "./view.htm");
 
-    // sqlConnect();
-
-    // sqlDisconnect();
+    pushFeedbackToLog("This demo site stores only the " . MAX_FILE_COUNT . " latest uploads!");
     
     domSetTitle(toDisplayText(getMilestoneTitle() . " - uploading: " . $doc));
 
