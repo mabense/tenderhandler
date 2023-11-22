@@ -66,6 +66,8 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     $goBack->setAttribute("href", "../" . findPage("milestone"));
     $buttons->appendChild($goBack);
 
+    pushFeedbackToLog("This demo site stores only the " . MAX_FILE_COUNT . " latest uploads!");
+
     domSetTitle(toDisplayText(getMilestoneTitle() . " - Documents"));
 
     domPopFeedback();

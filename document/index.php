@@ -95,6 +95,8 @@ if (newDOMDocument(BASE_TEMPLATE)) {
         pushFeedbackToLog("Document isn't selected.", true);
     }
 
+    pushFeedbackToLog("This demo site stores only the " . MAX_FILE_COUNT . " latest uploads!");
+
     domSetTitle(toDisplayText($page));
 
     domPopFeedback();
