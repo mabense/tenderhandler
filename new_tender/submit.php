@@ -26,9 +26,10 @@ if (
     && isset($manager)
 ) {
     sqlConnect();
+    $tAdmin = ADMIN_TABLE;
     $result = sqlNewTender($code, $begin, $end, $asked, $granted, $topic, $manager) 
     && sqlPrepareBindExecute(
-        "INSERT INTO admin (`admin`, `tender`) VALUES (?, ?)", 
+        "INSERT INTO $tAdmin (`admin`, `tender`) VALUES (?, ?)", 
         "ss", 
         [$user, $code], 
         __FUNCTION__

@@ -24,10 +24,11 @@ function _sqlDump($sqlResult, $rowSeparator)
 function _sqlTest()
 {
     global $conn;
+    $tUser = USER_TABLE;
     /* */
-    $sql = "SELECT * FROM user";
+    $sql = "SELECT * FROM $tUser";
     /*/
-    $sql = "SELECT * FROM user WHERE `name`='Kis Pista'";
+    $sql = "SELECT * FROM $tUser WHERE `name`='Kis Pista'";
     /* */
     $stmt = $conn->prepare($sql);
     $stmt->execute();

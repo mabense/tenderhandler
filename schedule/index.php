@@ -27,12 +27,13 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    // $sql = "SELECT * FROM milestone";
-    // $sql = "SELECT `date`, `number` FROM milestone";
-    $sql = "SELECT YEAR(`date`) AS year, MONTH(`date`) AS month, COUNT(`number`) AS due 
-    FROM milestone GROUP BY year, month";
-
     sqlConnect();
+    $tMilestone = MILESTONE_TABLE;
+
+    // $sql = "SELECT * FROM $tMilestone";
+    // $sql = "SELECT `date`, `number` FROM $tMilestone";
+    $sql = "SELECT YEAR(`date`) AS year, MONTH(`date`) AS month, COUNT(`number`) AS due 
+    FROM $tMilestone GROUP BY year, month";
     sqlQueryContent(
         $sql,
         [

@@ -27,12 +27,14 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    // $sql = "SELECT `email`, `name`, `now_active`, `last_active` FROM user WHERE `is_admin`=FALSE";
-    $sql = "SELECT user.`name` AS name, tender.`manager` AS email, COUNT(tender.`code`) AS projects " .
-        "FROM tender LEFT JOIN user ON tender.`manager`=user.`email` " .
-        "GROUP BY email";
-
     sqlConnect();
+    $tUser = USER_TABLE;
+    $tTender = TENDER_TABLE;
+
+    // $sql = "SELECT `email`, `name`, `now_active`, `last_active` FROM user WHERE `is_admin`=FALSE";
+    $sql = "SELECT $tUser.`name` AS name, $tTender.`manager` AS email, COUNT($tTender.`code`) AS projects " .
+        "FROM $tTender LEFT JOIN $tUser ON $tTender.`manager`=$tUser.`email` " .
+        "GROUP BY email";
     sqlQueryContent(
         $sql,
         [

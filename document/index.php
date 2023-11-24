@@ -45,6 +45,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     if ($tenderCode && $msCode && $docReq) {
         sqlConnect();
+        $tDocument = DOCUMENT_TABLE;
 
         $docData["tender"] = $tenderCode;
         $docData["milestone"] = $msCode;
@@ -52,7 +53,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
         $page = getMilestoneTitle() . " - " . $docReq;
         $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
         $docStmt = sqlPrepareBindExecute(
-            "SELECT $fields FROM document WHERE `tender`=? AND `milestone`=? AND `requirement`=?",
+            "SELECT $fields FROM $tDocument WHERE `tender`=? AND `milestone`=? AND `requirement`=?",
             "sis",
             [$tenderCode, $msCode, $docReq],
             __FUNCTION__

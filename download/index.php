@@ -27,8 +27,9 @@ if (
     isset($doc)
 ) {
     sqlConnect();
+    $tDocument = DOCUMENT_TABLE;
 
-    $sql = "SELECT `document`, `file_name` FROM document WHERE `tender`=? AND `milestone`=? AND `requirement`=?";
+    $sql = "SELECT `document`, `file_name` FROM $tDocument WHERE `tender`=? AND `milestone`=? AND `requirement`=?";
     $stmt = sqlPrepareBindExecute(
         $sql,
         "sis",

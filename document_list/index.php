@@ -31,10 +31,11 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
     sqlConnect();
+    $tDocument = DOCUMENT_TABLE;
     $fields = "`tender`, `milestone`, `requirement`, `participant`, `fulfilled`, `sum_paid`, `deadline_submit`, `deadline_verify`";
     // $sql = "";
     sqlQueryContentParam(
-        "SELECT $fields FROM document WHERE `tender`=? AND  `milestone`=?",
+        "SELECT $fields FROM $tDocument WHERE `tender`=? AND  `milestone`=?",
         "si",
         [$tenderCode, $msCode],
         [

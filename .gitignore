@@ -1,2 +1,3 @@
-_configs/
+
 __TEST.php
+_configs/livehost.php

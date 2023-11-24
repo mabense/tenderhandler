@@ -22,8 +22,9 @@ function passwordCompare($one, $other)
 
 function sqlLogout($email)
 {
+    $tUser = USER_TABLE;
     $changes = "`now_active`=FALSE, `last_active`=CURRENT_DATE";
-    $setInactive = "UPDATE user SET $changes WHERE `email`=?";
+    $setInactive = "UPDATE $tUser SET $changes WHERE `email`=?";
     $success = sqlPrepareBindExecute(
         $setInactive,
         "s",
@@ -40,8 +41,9 @@ function sqlLogout($email)
 
 function sqlLogin($email, $password)
 {
+    $tUser = USER_TABLE;
     $fields = "`email`, `password`, `name`, `is_admin`";
-    $sql = "SELECT $fields FROM user WHERE `email`=?";
+    $sql = "SELECT $fields FROM $tUser WHERE `email`=?";
     // pushFeedbackToLog($sql);
     // pushFeedbackToLog(__FUNCTION__);
     $stmt = sqlPrepareBindExecute(
@@ -68,7 +70,7 @@ function sqlLogin($email, $password)
     }
 
     $changes = "`now_active`=TRUE, `last_active`=CURRENT_DATE";
-    $setActive = "UPDATE user SET $changes WHERE `email`=?";
+    $setActive = "UPDATE $tUser SET $changes WHERE `email`=?";
     $stmt2 = sqlPrepareBindExecute(
         $setActive,
         "s",
@@ -85,6 +87,7 @@ function sqlLogin($email, $password)
 
 function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
 {
+    $tUser = USER_TABLE;
     if (!passwordStrong($password)) {
         pushFeedbackToLog("Password is too weak.", true);
         return false;
@@ -95,7 +98,7 @@ function sqlSignup($email, $password, $passwordAgain, $name, $isAdmin)
     }
     $password = password_hash($password, PASSWORD_BCRYPT);
     $fields = "(`email`, `password`, `name`, `is_admin`)";
-    $sql = "INSERT INTO user $fields VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO $tUser $fields VALUES (?, ?, ?, ?)";
     $stmt = sqlPrepareBindExecute(
         $sql,
         "sssi",

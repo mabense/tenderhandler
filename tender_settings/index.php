@@ -24,11 +24,12 @@ if (newDOMDocument(BASE_TEMPLATE)) {
     domAppendTemplateTo("content", "./view.htm");
 
     sqlConnect();
+    $tUser = USER_TABLE;
 
     // Fill Manager Select
     $manSelect = $dom->getElementById("manager");
     $stmt = sqlPrepareExecute(
-        "SELECT `email`, `name` FROM user WHERE `is_admin`=FALSE", 
+        "SELECT `email`, `name` FROM $tUser WHERE `is_admin`=FALSE", 
         __FUNCTION__
     );
     $manResult = $stmt->get_result();

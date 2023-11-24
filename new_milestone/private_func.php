@@ -4,9 +4,10 @@ require_once(LIB_DIR . "sql.php");
 
 function sqlNewMilestone($tender, $name, $date, $description)
 {
+    $tMilestone = MILESTONE_TABLE;
     $number = 1;
     $numStmt = sqlPrepareBindExecute(
-        "SELECT MAX(`number`) AS max FROM milestone WHERE `tender`=?",
+        "SELECT MAX(`number`) AS max FROM $tMilestone WHERE `tender`=?",
         "s",
         [$tender],
         __FUNCTION__
@@ -16,7 +17,7 @@ function sqlNewMilestone($tender, $name, $date, $description)
         $number = $numRow["max"] + 1;
     }
     $fields = "(`tender`, `number`, `name`, `date`, `description`)";
-    $sql = "INSERT INTO milestone $fields VALUES (?, ?, ?, ?, ?)";
+    $sql = "INSERT INTO $tMilestone $fields VALUES (?, ?, ?, ?, ?)";
     $success = sqlPrepareBindExecute(
         $sql,
         "sisss",

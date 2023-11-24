@@ -27,10 +27,12 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
-    $fields = "`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`";
     sqlConnect();
+        $tTender = TENDER_TABLE;
+
+    $fields = "`code`, `begins`, `ends`, `sum_asked`, `sum_granted`, `manager`";
     sqlQueryContent(
-        "SELECT $fields FROM tender", 
+        "SELECT $fields FROM $tTender", 
         [
             "code", 
             "begins", 

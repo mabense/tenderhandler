@@ -29,17 +29,19 @@ if (newDOMDocument(BASE_TEMPLATE)) {
 
     domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
 
+    sqlConnect();
+    $tDocument = DOCUMENT_TABLE;
+    $tMilestone = MILESTONE_TABLE;
+
     $sql = "SELECT `tender`, `milestone` AS number, `name`, `date`, 
     SUM(NOT ISNULL(`document`)) AS files, SUM(NOT ISNULL(`requirement`)) AS reqs, 
     SUM(`sum_paid`) AS paid
     FROM (
-        (SELECT `tender`, `number` AS milestone, `name`, `date` FROM milestone WHERE `tender`=?) AS MS 
+        (SELECT `tender`, `number` AS milestone, `name`, `date` FROM $tMilestone WHERE `tender`=?) AS MS 
         NATURAL LEFT JOIN 
-        (SELECT `tender`, `milestone`, `document`, `requirement`, `sum_paid` FROM document) AS DOC
+        (SELECT `tender`, `milestone`, `document`, `requirement`, `sum_paid` FROM $tDocument) AS DOC
     )
     GROUP BY `tender`, `milestone`;";
-
-    sqlConnect();
     sqlQueryContentParam(
         $sql,
         "s",
