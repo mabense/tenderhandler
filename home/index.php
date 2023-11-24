@@ -12,9 +12,9 @@ if(!auth(false, true, true)){
     redirectTo(ROOT, "log_in");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 
 if (newDOMDocument(BASE_TEMPLATE)) {
 

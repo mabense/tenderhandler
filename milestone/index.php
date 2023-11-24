@@ -13,11 +13,11 @@ if (!auth(false, true, true)) {
     redirectTo(ROOT, "log_in");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 
-domHandleTableRow();
+handleTableRow();
 $tenderCode = getTender();
 $msCode = getMilestone();
 
@@ -84,7 +84,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
                 }
             }
         } else {
-            pushFeedbackToLog("Milestone disappeared!?", true);
+            pushFeedbackToLog("Milestone may have been removed.", true);
         }
 
         domContentTableFrom($milestoneData);

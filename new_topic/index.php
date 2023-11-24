@@ -11,9 +11,9 @@ if(!auth(false, false, true)){
     redirectTo(ROOT, "home");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 
 if (newDOMDocument(BASE_TEMPLATE)) {
 

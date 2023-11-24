@@ -6,6 +6,7 @@ require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");
 
 require_once(LIB_DIR . "sql.php");
+require_once(LIB_DIR . "sql_dom.php");
 
 haveSession();
 
@@ -16,9 +17,9 @@ if(!auth(false, true, true)){
     redirectTo(ROOT, "log_in");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 
 if (newDOMDocument(BASE_TEMPLATE)) {
 

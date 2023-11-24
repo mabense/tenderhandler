@@ -13,11 +13,11 @@ if (!auth(false, true, true)) {
     redirectTo(ROOT, "log_in");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 
-domHandleTableRow();
+handleTableRow();
 $tenderCode = getTender();
 $msCode = getMilestone();
 $docReq = getDocument();
@@ -66,7 +66,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
             $docData["deadline_submit"] = $doc["deadline_submit"];
             $docData["deadline_verify"] = $doc["deadline_verify"];
         } else {
-            pushFeedbackToLog("Document disappeared!?", true);
+            pushFeedbackToLog("Document may have been removed.", true);
         }
 
         domContentTableFrom($docData);

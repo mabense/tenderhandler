@@ -13,9 +13,9 @@ if (!auth(false, true, true)) {
     redirectTo(ROOT, "log_in");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 $tenderCode = getTender();
 $msCode = getMilestone();
 

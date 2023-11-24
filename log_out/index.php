@@ -6,6 +6,7 @@ require_once(ROOT . "const.php");
 require_once(ROOT . "requirements.php");
 
 require_once(LIB_DIR . "sql.php");
+require_once(LIB_DIR . "sql_auth.php");
 
 haveSession();
 

@@ -7,6 +7,6 @@ require_once(ROOT . "requirements.php");
 
 // haveSession();
 
-domHandleMissingPage();
+handleMissingPage();
 
 redirectTo(ROOT,  DEFAULT_PAGE);

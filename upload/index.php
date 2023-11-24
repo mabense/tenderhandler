@@ -13,9 +13,9 @@ if(!auth(false, true, false)){
     redirectTo(ROOT, "home");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 
 $doc = getDocument();
 

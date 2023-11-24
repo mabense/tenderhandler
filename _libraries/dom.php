@@ -1,65 +1,7 @@
 <?php
-require_once(LIB_DIR . "foo.php");
-require_once(LIB_DIR . "session.php");
 require_once(LIB_DIR . "feedback_log.php");
-
-function domHandleMissingPage()
-{
-    haveSession();
-    $missingPage = fromGET("missing");
-    if (isset($missingPage)) {
-        pushFeedbackToLog("\"" . $missingPage . "\" not found.", true);
-
-        redirectTo(ROOT, PAGE);
-    }
-}
-
-function domHandleAction()
-{
-    haveSession();
-    $action = fromGET("action");
-    if (isset($action)) {
-        $actionPath = "./" . $action . ".php";
-        if (file_exists($actionPath)) {
-            include_once($actionPath);
-            pushFeedbackToLog("\"" . $action . "\" failed.", true);
-
-            redirectTo(ROOT, PAGE);
-        } else {
-            pushFeedbackToLog("\"" . $action . "\" not found.", true);
-
-            redirectTo(ROOT, PAGE);
-        }
-    }
-}
-
-
-function domHandleTableRow()
-{
-    haveSession();
-    $rowIndex = fromGET("row");
-    if (isset($rowIndex)) {
-        $allKeys = getTableAllKeys();
-        $keys = $allKeys[$rowIndex];
-        switch (PAGE) {
-            case 'tender':
-                setTender($keys["code"]);
-                break;
-            case 'milestone':
-                setMilestone($keys["number"]);
-                break;
-            case 'document':
-                setDocument($keys["requirement"]);
-                break;
-            default:
-                break;
-        }
-
-        resetTableAllKeys();
-
-        redirectTo(ROOT, PAGE);
-    }
-}
+require_once(LIB_DIR . "session.php");
+require_once(LIB_DIR . "public_func.php");
 
 
 function newDOMDocument($baseTemplatePath)

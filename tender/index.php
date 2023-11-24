@@ -13,11 +13,11 @@ if(!auth(false, true, true)){
     redirectTo(ROOT, "log_in");
 }
 
-domHandleMissingPage();
+handleMissingPage();
 
-domHandleAction();
+handleAction();
 
-domHandleTableRow();
+handleTableRow();
 $tenderCode = getTender();
 
 $page = PAGE;
@@ -90,7 +90,7 @@ if (newDOMDocument(BASE_TEMPLATE)) {
                 $page = $topic["title"] . " - " . $page;
             }
         } else {
-            pushFeedbackToLog("Tender disappeared!?", true);
+            pushFeedbackToLog("Tender may have been removed.", true);
         }
 
         domContentTableFrom($tenderData);

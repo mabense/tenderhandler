@@ -1,5 +1,6 @@
 <?php
 require_once(LIB_DIR . "sql.php");
+require_once(LIB_DIR . "sql_auth.php");
 
 haveSession();
 $user = false;
