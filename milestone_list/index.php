@@ -1,0 +1,83 @@
+<?php
+define("ROOT", ".." . DIRECTORY_SEPARATOR);
+define("PAGE", "milestone_list");
+
+require_once(ROOT . "const.php");
+require_once(ROOT . "requirements.php");
+
+require_once(LIB_DIR . "sql.php");
+require_once(LIB_DIR . "sql_dom.php");
+
+haveSession();
+
+$tenderCode = getTender();
+
+if (!auth(false, true, true)) {
+    redirectTo(ROOT, "log_in");
+}
+
+handleMissingPage();
+
+handleAction();
+
+if (newDOMDocument(BASE_TEMPLATE)) {
+
+    domAddStyle("../_styles/query_page.css");
+    // domAddStyle(STYLE_DIR . "query_page.css");
+
+    domMakeToolbarLoggedIn();
+
+    domAppendTemplateTo("content", TEMPLATE_DIR . "sql_result.htm");
+
+    sqlConnect();
+    $tDocument = DOCUMENT_TABLE;
+    $tMilestone = MILESTONE_TABLE;
+
+    $sql = "SELECT `tender`, `milestone` AS number, `name`, `date`, 
+    SUM(NOT ISNULL(`document`)) AS files, SUM(NOT ISNULL(`requirement`)) AS reqs, 
+    SUM(`sum_paid`) AS paid
+    FROM (
+        (SELECT `tender`, `number` AS milestone, `name`, `date` FROM $tMilestone WHERE `tender`=?) AS MS 
+        NATURAL LEFT JOIN 
+        (SELECT `tender`, `milestone`, `document`, `requirement`, `sum_paid` FROM $tDocument) AS DOC
+    )
+    GROUP BY `tender`, `milestone`;";
+    sqlQueryContentParam(
+        $sql,
+        "s",
+        [$tenderCode],
+        [
+            "number",
+            "name",
+            "date",
+            "files/required",
+            "paid out"
+        ],
+        "milestone",
+        [
+            "number"
+        ], 
+        true
+    );
+    sqlDisconnect();
+
+    $buttons = $dom->getElementById("contentButtons");
+
+    if (isUserAdmin()) {
+        $addMS = $dom->createElement("a", "Add New Milestone");
+        $addMS->setAttribute("class", "a_button");
+        $addMS->setAttribute("href", "../" . findPage("new_milestone"));
+        $buttons->appendChild($addMS);
+    }
+    $goBack = $dom->createElement("a", "Back to Tender");
+    $goBack->setAttribute("class", "a_button");
+    $goBack->setAttribute("href", "../" . findPage("tender"));
+    $buttons->appendChild($goBack);
+
+    domSetTitle(toDisplayText($tenderCode . " - " . PAGE));
+
+    domPopFeedback();
+}
+
+global $dom;
+echo $dom->saveHTML();

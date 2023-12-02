@@ -1,0 +1,34 @@
+<h1 id="contentTitle"></h1>
+<form id="mainForm" method="POST" action="./index.php?action=submit" accept-charset="utf8">
+    <label for="req">
+        <span>Requirement to be documented:</span><br />
+        <span class="row">
+            <input id="req" name="req" type="text" size="20" maxlength="20" required />
+        </span>
+    </label>
+    <br />
+    <label for="parti">
+        <span>Name of responsible participant:</span><br />
+        <span class="row">
+            <input id="parti" name="parti" type="text" size="42" maxlength="42" required />
+        </span>
+    </label>
+    <br />
+    <label for="submit_date">
+        <span>Submition deadline:</span><br />
+        <span class="row">
+            <input id="submit_date" name="submit_date" type="date" />
+        </span>
+    </label>
+    <br />
+    <label for="verify_date">
+        <span>Verification deadline:</span><br />
+        <span class="row">
+            <input id="verify_date" name="verify_date" type="date" />
+        </span>
+    </label>
+    <br />
+    <div class="row">
+        <input id="ok" name="ok" type="submit" value="Confirm" />
+    </div>
+</form>

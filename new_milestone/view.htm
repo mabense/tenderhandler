@@ -1,0 +1,27 @@
+<h1 id="contentTitle"></h1>
+<form id="mainForm" method="POST" action="./index.php?action=submit" accept-charset="utf8">
+    <label for="name">
+        <span>Title:</span><br />
+        <span class="row">
+            <input id="name" name="name" type="text" size="100" maxlength="100" required />
+        </span>
+    </label>
+    <br />
+    <label for="date">
+        <span>Milestone's deadline:</span><br />
+        <span class="row">
+            <input id="date" name="date" type="date" />
+        </span>
+    </label>
+    <br />
+    <label for="desc">
+        <span>Purpose:</span><br />
+        <span class="row">
+            <textarea id="desc" name="desc" maxlength="1000" wrap="soft" required ></textarea>
+        </span>
+    </label>
+    <br />
+    <div class="row">
+        <input id="ok" name="ok" type="submit" value="Confirm" />
+    </div>
+</form>

@@ -1,0 +1,19 @@
+<h1 id="contentTitle"></h1>
+<form id="mainForm" method="POST" action="./index.php?action=submit" accept-charset="utf8">
+    <label for="title">
+        <span>Title:</span><br />
+        <span class="row">
+            <input id="title" name="title" type="text" size="100" maxlength="100" required />
+        </span>
+    </label>
+    <label for="purpose">
+        <span>Purpose:</span><br />
+        <span class="row">
+            <textarea id="purpose" name="purpose" maxlength="1000" wrap="soft" required ></textarea>
+        </span>
+    </label>
+    <br />
+    <div class="row">
+        <input id="ok" name="ok" type="submit" value="Confirm" />
+    </div>
+</form>
